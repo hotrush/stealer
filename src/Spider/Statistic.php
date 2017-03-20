@@ -88,14 +88,6 @@ class Statistic
     }
 
     /**
-     * @param int $num
-     */
-    public function decrementSuccessRequests($num = 1)
-    {
-        $this->successRequests -= (int) $num;
-    }
-
-    /**
      * @return int
      */
     public function getSuccessRequests()
@@ -109,14 +101,6 @@ class Statistic
     public function incrementFailedRequests($num = 1)
     {
         $this->failedRequests += (int) $num;
-    }
-
-    /**
-     * @param int $num
-     */
-    public function decrementFailedRequests($num = 1)
-    {
-        $this->failedRequests -= (int) $num;
     }
 
     /**

@@ -26,14 +26,17 @@ class SpiderStatisticTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(2, 'activeRequests', $statistic);
         $statistic->decrementActiveRequests(2);
         $this->assertAttributeEquals(0, 'activeRequests', $statistic);
+        $this->assertEquals(0, $statistic->getActiveRequests());
         $statistic->incrementFailedRequests();
         $this->assertAttributeEquals(1, 'failedRequests', $statistic);
         $statistic->incrementFailedRequests(2);
         $this->assertAttributeEquals(3, 'failedRequests', $statistic);
-        $statistic->decrementFailedRequests();
-        $this->assertAttributeEquals(2, 'failedRequests', $statistic);
-        $statistic->decrementFailedRequests(2);
-        $this->assertAttributeEquals(0, 'failedRequests', $statistic);
+        $this->assertEquals(3, $statistic->getFailedRequests());
+        $statistic->incrementSuccessRequests();
+        $this->assertAttributeEquals(1, 'successRequests', $statistic);
+        $statistic->incrementSuccessRequests(2);
+        $this->assertAttributeEquals(3, 'successRequests', $statistic);
+        $this->assertEquals(3, $statistic->getSuccessRequests());
         $this->assertEquals(0, $statistic->getRequestsPerSecond());
     }
 
