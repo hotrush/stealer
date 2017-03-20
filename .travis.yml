@@ -1,0 +1,37 @@
+language: php
+sudo: false
+
+## Cache composer bits
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+## PHP versions we test against
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - nightly
+  - hhvm
+
+## Update composer and run the appropriate composer command
+install:
+  # Install composer packages, will also trigger dump-autoload
+  - composer install --no-interaction
+  # Install coveralls.phar
+  - wget -c -nc --retry-connrefused --tries=0 https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
+  - chmod +x coveralls.phar
+  - php coveralls.phar --version
+
+# Create a storage folder for Coverage report
+before_script:
+  - mkdir -p build/logs
+
+# Testing the app (see phpunit.xml), generating Code Coverage report
+script:
+  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+# Submit generated coverage report to Coveralls servers, see .coveralls.yml
+after_success:
+ - travis_retry php coveralls.phar -v

@@ -1,0 +1,57 @@
+{
+    "name": "hotrush/stealer",
+    "authors": [
+        {
+            "name": "rush",
+            "email": "johny64@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "react/cache": "0.4.*",
+        "react/child-process": "0.4.*",
+        "react/dns": "0.4.*",
+        "react/event-loop": "0.4.*",
+        "react/http-client": "0.4.*",
+        "react/http": "0.4.*",
+        "react/promise": "~2.1",
+        "react/socket-client": "^0.5.3",
+        "react/socket": "0.4.*",
+        "react/stream": "0.4.*",
+        "guzzlehttp/guzzle": "~6.0",
+        "symfony/dom-crawler": "^3.2",
+        "symfony/css-selector": "^3.2",
+        "hotrush/react-guzzle-http-client": "3.0.7",
+        "hotrush/react-guzzle-psr7": "1.0.3",
+        "josegonzalez/dotenv": "^2.1",
+        "monolog/monolog": "^1.22",
+        "mkraemer/react-pcntl": "^2.2"
+    },
+    "require-dev": {
+        "hotrush/scrapoxy-react-client": "^1.0",
+        "phpunit/phpunit": "^4.0|^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hotrush\\Stealer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hotrush\\Stealer\\Tests\\": "tests/"
+        }
+    },
+    "repositories": {
+        "repo": {
+            "type": "git",
+            "url": "https://github.com/hotrush/react-guzzle-http-client.git"
+        },
+        "repo2": {
+            "type": "git",
+            "url": "https://github.com/hotrush/react-guzzle-psr7.git"
+        }
+    },
+    "suggest": {
+        "hotrush/scrapoxy-react-client": "Async scrapoxy api client"
+    }
+}
