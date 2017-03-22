@@ -29,7 +29,7 @@ class Server
      * @var Worker
      */
     private $worker;
-    
+
     /**
      * @var string
      */

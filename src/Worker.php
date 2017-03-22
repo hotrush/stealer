@@ -89,7 +89,8 @@ class Worker
     /**
      * Start react periodic timer.
      */
-    private function startPeriodicTimer() {
+    private function startPeriodicTimer()
+    {
         $this->loop->addPeriodicTimer(1, function () {
             if ($this->stopping || $this->stopped) {
                 return;

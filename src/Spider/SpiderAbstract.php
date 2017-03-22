@@ -85,11 +85,11 @@ abstract class SpiderAbstract
     abstract public function getStartRequest();
 
     /**
-     * Send requests for this tick
+     * Send requests for this tick.
      */
     public function executeTickRequests()
     {
-        for($i = 1; $i <= $this->perTick; $i++) {
+        for ($i = 1; $i <= $this->perTick; $i++) {
             $request = array_shift($this->requests);
 
             if ($request) {

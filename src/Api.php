@@ -58,7 +58,6 @@ class Api
                 }
 
                 $this->$action($payload, $response);
-
             }, function ($reason) use ($response) {
                 $this->replyWithError(500, $reason, $response);
             });
