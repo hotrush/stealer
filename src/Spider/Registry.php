@@ -49,7 +49,7 @@ class Registry
         if (!isset($this->spiders[$name])) {
             throw new \InvalidArgumentException('No spider with name '.$name.' was found');
         }
-        
+
         return $this->spiders[$name];
     }
 

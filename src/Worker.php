@@ -70,6 +70,7 @@ class Worker
         $job->initLogger();
         $this->activeJobs[$jobId] = $job;
         $this->logger->info('Job started. Spider: '.$spiderName.'. ID: '.$jobId);
+
         return $jobId;
     }
 

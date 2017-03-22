@@ -118,6 +118,7 @@ abstract class SpiderAbstract
     {
         $crawler = new Crawler();
         $crawler->addHtmlContent((string) $response->getBody()->getContents());
+
         return $crawler;
     }
 }
