@@ -9,6 +9,7 @@ class Middleware
 {
     /**
      * @param $address
+     *
      * @return \Closure
      */
     public static function proxy($address)

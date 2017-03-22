@@ -7,14 +7,14 @@ use Hotrush\Stealer\AbstractClient;
 class Request
 {
     /**
-     * http method
+     * http method.
      *
      * @var string
      */
     private $method;
 
     /**
-     * uri to request
+     * uri to request.
      *
      * @var string
      */

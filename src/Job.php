@@ -65,7 +65,7 @@ class Job
     }
 
     /**
-     * Init logger for job and spider
+     * Init logger for job and spider.
      */
     public function initLogger()
     {
@@ -85,7 +85,7 @@ class Job
     }
 
     /**
-     * Execute tick jobs
+     * Execute tick jobs.
      */
     public function executeTickJob()
     {

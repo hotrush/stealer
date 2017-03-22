@@ -24,9 +24,9 @@ abstract class AbstractClient
 
     /**
      * AbstractClient constructor.
-     * 
+     *
      * @param LoopInterface $loop
-     * @param Logger $logger
+     * @param Logger        $logger
      */
     public function __construct(LoopInterface $loop, Logger $logger)
     {
@@ -61,11 +61,9 @@ abstract class AbstractClient
 
     public function start()
     {
-
     }
 
     public function end()
     {
-        
     }
 }

@@ -15,7 +15,7 @@ abstract class SpiderAbstract
     private $client;
 
     /**
-     * Requests per second
+     * Requests per second.
      *
      * @var int
      */
@@ -78,9 +78,9 @@ abstract class SpiderAbstract
     }
 
     /**
-     * Initial requests
+     * Initial requests.
      *
-     * @return mixed
+     * @return Request
      */
     abstract public function getStartRequest();
 
@@ -89,12 +89,10 @@ abstract class SpiderAbstract
      */
     public function executeTickRequests()
     {
-        for($i = 1; $i <= $this->perTick; $i++)
-        {
+        for($i = 1; $i <= $this->perTick; $i++) {
             $request = array_shift($this->requests);
 
-            if ($request)
-            {
+            if ($request) {
                 $this->statistic->incrementActiveRequests();
                 $request->send($this->getClient());
             }
@@ -108,11 +106,12 @@ abstract class SpiderAbstract
     {
         $this->statistic->decrementActiveRequests();
         $this->statistic->incrementFailedRequests();
-        $this->logger->error('Error receiving page: ' . (string) $reason);
+        $this->logger->error('Error receiving page: '.(string) $reason);
     }
 
     /**
      * @param ResponseInterface $response
+     *
      * @return Crawler
      */
     protected function createCrawlerFromResponse(ResponseInterface $response)

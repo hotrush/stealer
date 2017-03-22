@@ -29,8 +29,8 @@ class Api
      * Api constructor.
      *
      * @param Registry $registry
-     * @param Logger $logger
-     * @param Worker $worker
+     * @param Logger   $logger
+     * @param Worker   $worker
      */
     public function __construct(Registry $registry, Logger $logger, Worker $worker)
     {
@@ -41,25 +41,25 @@ class Api
 
     public function processRequest(Request $request, Response $response)
     {
-        if ($request->getMethod() !== 'POST')
-        {
+        if ($request->getMethod() !== 'POST') {
             $this->replyWithError(405, 'Method now allowed.', $response);
+
             return;
         }
 
         $this->getEndpointAndPayload($request)
-            ->then(function($data) use ($response, $request) {
+            ->then(function ($data) use ($response, $request) {
                 list($action, $payload) = $data;
 
-                if (!method_exists($this, $action))
-                {
+                if (!method_exists($this, $action)) {
                     $this->replyWithError(404, 'Not found.', $response);
+
                     return;
                 }
 
                 $this->$action($payload, $response);
 
-            }, function($reason) use ($response) {
+            }, function ($reason) use ($response) {
                 $this->replyWithError(500, $reason, $response);
             });
     }
@@ -71,22 +71,21 @@ class Api
         $data = [];
 
         // @todo DO SOMETHING WITH REQUESTS WITHOUT PAYLOAD !!!!
-        $this->logger->info(substr($request->getPath(), 1) . ' action requested');
+        $this->logger->info(substr($request->getPath(), 1).' action requested');
 
         $request->on('data', function ($requestData) use ($deferred, &$data, $endpoint) {
             $data = json_decode($requestData, true);
-            if ($data === false)
-            {
+            if ($data === false) {
                 $deferred->reject('Invalid payload.');
             }
-            $this->logger->info('Request payload: ' . $requestData);
+            $this->logger->info('Request payload: '.$requestData);
         });
 
-        $request->on('end', function() use ($deferred, &$data, $endpoint) {
+        $request->on('end', function () use ($deferred, &$data, $endpoint) {
             $deferred->resolve([$endpoint, $data]);
         });
 
-        $request->on('error', function() use ($deferred) {
+        $request->on('error', function () use ($deferred) {
             $this->logger->error('Error occurred while data receiving.');
             $deferred->reject('Error occurred while data receiving.');
         });
@@ -96,8 +95,8 @@ class Api
 
     public function replyWithError($code, $error, Response $response)
     {
-        $this->logger->error('Api responded with ' . $code . ' status code and error message: ' . $error);
-        $response->writeHead($code, array('Content-Type' => 'application/json'));
+        $this->logger->error('Api responded with '.$code.' status code and error message: '.$error);
+        $response->writeHead($code, ['Content-Type' => 'application/json']);
         $response->end(json_encode([
             'message' => $error ? $error : 'Error occurred.',
         ]));
@@ -105,16 +104,16 @@ class Api
 
     private function scheduleAction(array $payload, Response $response)
     {
-        if (!isset($payload['spider']) || !$this->registry->spiderExists($payload['spider']))
-        {
+        if (!isset($payload['spider']) || !$this->registry->spiderExists($payload['spider'])) {
             $this->replyWithError(400, 'No spider found', $response);
+
             return;
         }
 
         $spider = $this->registry->getSpider($payload['spider']);
         $jobId = $this->worker->runSpiderJob($spider);
 
-        $response->writeHead(200, array('Content-Type' => 'application/json; charset=utf-8'));
+        $response->writeHead(200, ['Content-Type' => 'application/json; charset=utf-8']);
         $response->end(json_encode(['message' => 'Job scheduled', 'job_id' => $jobId]));
     }
 
@@ -122,15 +121,14 @@ class Api
     {
         $activeJobs = [];
 
-        foreach ($this->worker->getActiveJobs() as $item)
-        {
+        foreach ($this->worker->getActiveJobs() as $item) {
             $activeJobs[] = [
-                'id' => $item->getId(),
+                'id'         => $item->getId(),
                 'time_start' => $item->getStartTime(),
             ];
         }
 
-        $response->writeHead(200, array('Content-Type' => 'application/json; charset=utf-8'));
+        $response->writeHead(200, ['Content-Type' => 'application/json; charset=utf-8']);
         $response->end(json_encode(['active_jobs' => $activeJobs]));
     }
 }

@@ -45,9 +45,9 @@ class Worker
     /**
      * Worker constructor.
      *
-     * @param LoopInterface $loop
+     * @param LoopInterface  $loop
      * @param AbstractClient $client
-     * @param Logger $logger
+     * @param Logger         $logger
      */
     public function __construct(LoopInterface $loop, AbstractClient $client, Logger $logger)
     {
@@ -59,6 +59,7 @@ class Worker
 
     /**
      * @param $spiderName
+     *
      * @return string
      */
     public function runSpiderJob($spiderName)
@@ -68,7 +69,7 @@ class Worker
         $jobId = $job->getId();
         $job->initLogger();
         $this->activeJobs[$jobId] = $job;
-        $this->logger->info('Job started. Spider: ' . $spiderName.'. ID: ' . $jobId);
+        $this->logger->info('Job started. Spider: '.$spiderName.'. ID: '.$jobId);
         return $jobId;
     }
 
@@ -86,11 +87,10 @@ class Worker
     }
 
     /**
-     * Start react periodic timer
+     * Start react periodic timer.
      */
-    private function startPeriodicTimer()
-    {
-        $this->loop->addPeriodicTimer(1, function() {
+    private function startPeriodicTimer() {
+        $this->loop->addPeriodicTimer(1, function () {
             if ($this->stopping || $this->stopped) {
                 return;
             }
@@ -102,12 +102,12 @@ class Worker
                         $this->client->start();
                     }
                 } else {
-                    $this->logger->info('Job finished. ID: ' . $job->getId());
-                    $this->logger->info('Work time: ' . (time() - $job->getStartTime(false)));
-                    $this->logger->info('Total requests: ' . $job->getSpider()->getStatistic()->getTotalRequests());
-                    $this->logger->info('Success requests: ' . $job->getSpider()->getStatistic()->getSuccessRequests());
-                    $this->logger->info('Failed requests: ' . $job->getSpider()->getStatistic()->getFailedRequests());
-                    $this->logger->info('Average requests per second: ' .$job->getSpider()->getStatistic()->getRequestsPerSecond());
+                    $this->logger->info('Job finished. ID: '.$job->getId());
+                    $this->logger->info('Work time: '.(time() - $job->getStartTime(false)));
+                    $this->logger->info('Total requests: '.$job->getSpider()->getStatistic()->getTotalRequests());
+                    $this->logger->info('Success requests: '.$job->getSpider()->getStatistic()->getSuccessRequests());
+                    $this->logger->info('Failed requests: '.$job->getSpider()->getStatistic()->getFailedRequests());
+                    $this->logger->info('Average requests per second: '.$job->getSpider()->getStatistic()->getRequestsPerSecond());
                     $this->finishedJobs[] = $job;
                     unset($this->activeJobs[$key]);
                     $this->activeJobs = array_values($this->activeJobs);

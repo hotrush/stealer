@@ -2,11 +2,11 @@
 
 namespace Hotrush\Stealer\Client;
 
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\HandlerStack;
 use Hotrush\ScrapoxyClient\Client;
 use Hotrush\Stealer\AbstractClient;
 use Hotrush\Stealer\Middleware;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\HandlerStack;
 use React\Dns\Resolver\Factory;
 use WyriHaximus\React\GuzzlePsr7\HttpClientAdapter;
 
@@ -69,15 +69,15 @@ class Scrapoxy extends AbstractClient
             $this->getScrapoxtClient()->upScale()
                 ->then(
                     function () {
-                        $this->logger->info('Waiting for scaling: ' . $this->scalingDelay.'sec');
-                        $this->loop->addTimer($this->scalingDelay, function() {
+                        $this->logger->info('Waiting for scaling: '.$this->scalingDelay.'sec');
+                        $this->loop->addTimer($this->scalingDelay, function () {
                             $this->scrapoxyScaled = true;
                             $this->waiting = false;
                         });
                     },
                     function ($reason) {
                         // @todo throw an error and stop spider
-                        $this->logger->error('Error while scaling: ' . ((string) $reason));
+                        $this->logger->error('Error while scaling: '.((string) $reason));
                         $this->waiting = false;
                         $this->scrapoxyScaled = false;
                     }
@@ -100,13 +100,13 @@ class Scrapoxy extends AbstractClient
                 ->then(
                     function () {
                         $this->logger->info('Waiting for scaling: '.$this->scalingDelay.'sec');
-                        $this->loop->addTimer($this->scalingDelay, function() {
+                        $this->loop->addTimer($this->scalingDelay, function () {
                             $this->scrapoxyScaled = true;
                             $this->waiting = false;
                         });
                     },
                     function ($reason) {
-                        $this->logger->error('Error while scaling down: ' . ((string) $reason));
+                        $this->logger->error('Error while scaling down: '.((string) $reason));
                         // @todo throw an error and stop spider
                         $this->waiting = false;
                         $this->scrapoxyScaled = false;

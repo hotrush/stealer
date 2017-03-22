@@ -8,7 +8,7 @@ use Monolog\Logger;
 use React\EventLoop\LoopInterface;
 
 class Coordinator
-{   
+{
     /**
      * @var Registry
      */
@@ -69,7 +69,7 @@ class Coordinator
 
     /**
      * Register handlers for killing signals.
-     * Close worker and client on exit
+     * Close worker and client on exit.
      */
     private function registerKillSignal()
     {
@@ -84,7 +84,7 @@ class Coordinator
             $this->logger->info('Stopping stealer');
             $this->worker->stop();
             $this->client->end();
-            $this->loop->addPeriodicTimer(1, function() {
+            $this->loop->addPeriodicTimer(1, function () {
                 if (
                     $this->worker->isStopped()
                     &&

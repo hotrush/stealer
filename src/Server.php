@@ -5,8 +5,8 @@ namespace Hotrush\Stealer;
 use Hotrush\Stealer\Spider\Registry;
 use Monolog\Logger;
 use React\EventLoop\LoopInterface;
-use React\Socket\Server as SocketServer;
 use React\Http\Server as HttpServer;
+use React\Socket\Server as SocketServer;
 
 class Server
 {
@@ -37,10 +37,11 @@ class Server
 
     /**
      * Server constructor.
+     *
      * @param LoopInterface $loop
-     * @param Registry $registry
-     * @param Logger $logger
-     * @param Worker $worker
+     * @param Registry      $registry
+     * @param Logger        $logger
+     * @param Worker        $worker
      */
     public function __construct(LoopInterface $loop, Registry $registry, Logger $logger, Worker $worker)
     {
@@ -51,7 +52,7 @@ class Server
     }
 
     /**
-     * Change api server port
+     * Change api server port.
      *
      * @param $port
      */
@@ -61,7 +62,7 @@ class Server
     }
 
     /**
-     * Start an api server
+     * Start an api server.
      *
      * @throws \React\Socket\ConnectionException
      */
@@ -70,7 +71,7 @@ class Server
         $socket = new SocketServer($this->loop);
         $http = new HttpServer($socket);
         $api = new Api($this->registry, $this->logger, $this->worker);
-        $http->on('request', function($request, $response) use ($api) {
+        $http->on('request', function ($request, $response) use ($api) {
             $api->processRequest($request, $response);
         });
         $socket->listen($this->port);

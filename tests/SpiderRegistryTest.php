@@ -24,7 +24,7 @@ class SpiderRegistryTest extends \PHPUnit_Framework_TestCase
         $this->registry->registerSpider('test', $this->spiderAbstract);
 
         $this->spidersArray = [
-            'test' => $this->spiderAbstract
+            'test' => $this->spiderAbstract,
         ];
     }
 

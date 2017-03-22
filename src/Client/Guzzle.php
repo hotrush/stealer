@@ -2,10 +2,10 @@
 
 namespace Hotrush\Stealer\Client;
 
-use Hotrush\Stealer\AbstractClient;
-use Hotrush\Stealer\Middleware;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
+use Hotrush\Stealer\AbstractClient;
+use Hotrush\Stealer\Middleware;
 use React\Dns\Resolver\Factory;
 use WyriHaximus\React\GuzzlePsr7\HttpClientAdapter;
 
