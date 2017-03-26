@@ -2,23 +2,20 @@
 
 namespace Hotrush\Stealer\Tests;
 
-use Hotrush\Stealer\AbstractClient;
-use Hotrush\Stealer\Job;
-use Hotrush\Stealer\Spider\SpiderAbstract;
-
 class JobTest extends \PHPUnit_Framework_TestCase
 {
     public function testJobCreating()
     {
         $loop = \React\EventLoop\Factory::create();
         $logger = $this->getMockBuilder(\Monolog\Logger::class)->setConstructorArgs(['test'])->getMock();
-        $clientAbstract = $this->getMockForAbstractClass(AbstractClient::class, [$loop, $logger]);
-        $spiderAbstract = $this->getMockForAbstractClass(SpiderAbstract::class, [$clientAbstract]);
+        $clientAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\AbstractClient::class, [$loop, $logger]);
+        $adaptersRegistry = $this->getMockBuilder(\Hotrush\Stealer\AdaptersRegistry::class)->getMock();
+        $spiderAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, [$clientAbstract, $adaptersRegistry]);
 
-        $this->assertTrue($spiderAbstract instanceof SpiderAbstract);
+        $this->assertTrue($spiderAbstract instanceof \Hotrush\Stealer\Spider\SpiderAbstract);
 
         $time = time();
-        $job = new Job($spiderAbstract);
+        $job = new \Hotrush\Stealer\Job($spiderAbstract);
         $this->assertAttributeNotEmpty('id', $job);
         $this->assertAttributeEquals($job->getId(), 'id', $job);
         $this->assertAttributeEquals($spiderAbstract, 'spider', $job);

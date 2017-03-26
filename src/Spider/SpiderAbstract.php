@@ -3,6 +3,7 @@
 namespace Hotrush\Stealer\Spider;
 
 use Hotrush\Stealer\AbstractClient;
+use Hotrush\Stealer\AdaptersRegistry;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -13,6 +14,11 @@ abstract class SpiderAbstract
      * @var AbstractClient
      */
     private $client;
+
+    /**
+     * @var AdaptersRegistry
+     */
+    protected $adaptersRegistry;
 
     /**
      * Requests per second.
@@ -39,11 +45,13 @@ abstract class SpiderAbstract
     /**
      * SpiderAbstract constructor.
      *
-     * @param AbstractClient $client
+     * @param AbstractClient   $client
+     * @param AdaptersRegistry $adaptersRegistry
      */
-    public function __construct(AbstractClient $client)
+    public function __construct(AbstractClient $client, AdaptersRegistry $adaptersRegistry)
     {
         $this->client = $client;
+        $this->adaptersRegistry = $adaptersRegistry;
         $this->statistic = new Statistic();
         $this->requests[] = $this->getStartRequest();
     }

@@ -28,8 +28,10 @@
         "mkraemer/react-pcntl": "^2.2"
     },
     "require-dev": {
+        "phpunit/phpunit": "^4.0|^5.0",
         "hotrush/scrapoxy-react-client": "^1.0",
-        "phpunit/phpunit": "^4.0|^5.0"
+        "pda/pheanstalk": "^3.1",
+        "bixuehujin/reactphp-mysql": "0.5"
     },
     "autoload": {
         "psr-4": {
@@ -49,9 +51,14 @@
         "repo2": {
             "type": "git",
             "url": "https://github.com/hotrush/react-guzzle-psr7.git"
+        },
+        "repo3": {
+            "type": "git",
+            "url": "https://github.com/hotrush/reactphp-mysql.git"
         }
     },
     "suggest": {
-        "hotrush/scrapoxy-react-client": "Async scrapoxy api client"
+        "hotrush/scrapoxy-react-client": "Async scrapoxy api client",
+        "pda/pheanstalk": "Pheanstalk is a pure PHP 5.3+ client for the beanstalkd workqueue"
     }
 }

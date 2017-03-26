@@ -18,6 +18,11 @@ class Worker
     private $client;
 
     /**
+     * @var AdaptersRegistry
+     */
+    private $adaptersRegistry;
+
+    /**
      * @var Logger
      */
     private $logger;
@@ -45,14 +50,16 @@ class Worker
     /**
      * Worker constructor.
      *
-     * @param LoopInterface  $loop
-     * @param AbstractClient $client
-     * @param Logger         $logger
+     * @param LoopInterface    $loop
+     * @param AbstractClient   $client
+     * @param AdaptersRegistry $adaptersRegistry
+     * @param Logger           $logger
      */
-    public function __construct(LoopInterface $loop, AbstractClient $client, Logger $logger)
+    public function __construct(LoopInterface $loop, AbstractClient $client, AdaptersRegistry $adaptersRegistry, Logger $logger)
     {
         $this->loop = $loop;
         $this->client = $client;
+        $this->adaptersRegistry = $adaptersRegistry;
         $this->logger = $logger;
         $this->startPeriodicTimer();
     }
@@ -64,7 +71,7 @@ class Worker
      */
     public function runSpiderJob($spiderName)
     {
-        $spider = new $spiderName($this->client);
+        $spider = new $spiderName($this->client, $this->adaptersRegistry);
         $job = new Job($spider);
         $jobId = $job->getId();
         $job->initLogger();

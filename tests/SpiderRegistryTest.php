@@ -18,7 +18,8 @@ class SpiderRegistryTest extends \PHPUnit_Framework_TestCase
         $loop = \React\EventLoop\Factory::create();
         $logger = $this->getMockBuilder(\Monolog\Logger::class)->setConstructorArgs(['test'])->getMock();
         $clientAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\AbstractClient::class, [$loop, $logger]);
-        $this->spiderAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, [$clientAbstract]);
+        $adaptersRegistry = $this->getMockBuilder(\Hotrush\Stealer\AdaptersRegistry::class)->getMock();
+        $this->spiderAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, [$clientAbstract, $adaptersRegistry]);
 
         $this->registry = new \Hotrush\Stealer\Spider\Registry();
         $this->registry->registerSpider('test', $this->spiderAbstract);

@@ -39,13 +39,19 @@ class Coordinator
      */
     private $logger;
 
-    public function __construct(Registry $registry, LoopInterface $loop, AbstractClient $client, Logger $logger)
+    /**
+     * @var AdaptersRegistry
+     */
+    private $adaptersRegistry;
+
+    public function __construct(Registry $registry, LoopInterface $loop, AbstractClient $client, AdaptersRegistry $adaptersRegistry, Logger $logger)
     {
         $this->registry = $registry;
         $this->loop = $loop;
         $this->client = $client;
         $this->logger = $logger;
-        $this->worker = new Worker($this->loop, $this->client, $this->logger);
+        $this->adaptersRegistry = $adaptersRegistry;
+        $this->worker = new Worker($this->loop, $this->client, $this->adaptersRegistry, $this->logger);
         $this->server = new Server($this->loop, $this->registry, $this->logger, $this->worker);
         $this->registerKillSignal();
     }

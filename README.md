@@ -8,3 +8,13 @@
 # Stealer
 
 TBA
+
+
+### TODO
+
+add adapters:
+
+- fix https://github.com/hotrush/reactphp-mysql
+- https://github.com/jakubkulhan/bunny
+- https://github.com/bzikarsky/react-gearman
+- https://github.com/nrk/predis-async or https://github.com/clue/php-redis-react
