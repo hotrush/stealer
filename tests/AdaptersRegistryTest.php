@@ -13,7 +13,7 @@ class AdaptersRegistryTest extends \PHPUnit_Framework_TestCase
         $adapter->method('getAdapter')->willReturn($stdClass);
         $adaptersRegistry->addAdapter('test', $adapter);
         $this->assertAttributeEquals([
-            'test' => $adapter
+            'test' => $adapter,
         ], 'adapters', $adaptersRegistry);
         $this->assertEquals($stdClass, $adaptersRegistry->getAdapter('test'));
     }

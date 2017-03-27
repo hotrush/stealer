@@ -131,11 +131,11 @@ class Worker
     }
 
     /**
-     * Start timer for logging stats for running jobs
+     * Start timer for logging stats for running jobs.
      */
     private function startStatsPeriodicTimer()
     {
-        $this->loop->addPeriodicTimer($this->statsLoggingInterval, function() {
+        $this->loop->addPeriodicTimer($this->statsLoggingInterval, function () {
             foreach ($this->activeJobs as $job) {
                 if ($job->getSpider()->isActive()) {
                     $this->logger->info('Job in progress. ID: '.$job->getId());
