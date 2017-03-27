@@ -2,8 +2,8 @@
 
 namespace Hotrush\Stealer\Adapters;
 
-use Pheanstalk\Pheanstalk;
 use Hotrush\Stealer\AdapterInterface;
+use Pheanstalk\Pheanstalk;
 
 class BeanstalkAdapter implements AdapterInterface
 {

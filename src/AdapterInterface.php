@@ -2,7 +2,7 @@
 
 namespace Hotrush\Stealer;
 
-interface AdapterInterface 
+interface AdapterInterface
 {
     public function getAdapter();
 }

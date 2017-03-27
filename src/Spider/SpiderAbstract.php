@@ -53,7 +53,10 @@ abstract class SpiderAbstract
         $this->client = $client;
         $this->adaptersRegistry = $adaptersRegistry;
         $this->statistic = new Statistic();
-        $this->requests[] = $this->getStartRequest();
+        $startRequest = $this->getStartRequest();
+        if ($startRequest) {
+            $this->requests[] = $startRequest;
+        }
     }
 
     public function setLogger(Logger $logger)

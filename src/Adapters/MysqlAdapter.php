@@ -12,11 +12,11 @@ class MysqlAdapter implements AdapterInterface
 
     public function __construct(LoopInterface $loop)
     {
-        $this->adapter = new MysqlConnection($loop, array(
+        $this->adapter = new MysqlConnection($loop, [
             'dbname' => getenv('MYSQL_DATABASE'),
             'user'   => getenv('MYSQL_USER'),
             'passwd' => getenv('MYSQL_PASSWORD'),
-        ));
+        ]);
     }
 
     public function getAdapter()

@@ -21,6 +21,7 @@ class Config
     /**
      * @param string        $filePath
      * @param LoopInterface $loop
+     *
      * @return AdaptersRegistry
      */
     public static function loadAdapters($filePath, LoopInterface $loop)
@@ -32,11 +33,13 @@ class Config
                 $pipeline->addAdapter($name, new $adapter($loop));
             }
         }
+
         return $pipeline;
     }
 
     /**
      * @param string $filePath
+     *
      * @return Registry
      */
     public static function loadRegistry($filePath)
@@ -48,6 +51,7 @@ class Config
                 $registry->registerSpider($name, $spider);
             }
         }
+
         return $registry;
     }
 }

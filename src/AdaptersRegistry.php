@@ -5,12 +5,13 @@ namespace Hotrush\Stealer;
 class AdaptersRegistry
 {
     /**
-     * @var array
+     * @var AdapterInterface[]
      */
     private $adapters = [];
 
     /**
-     * @param $adapterName
+     * @param string $adapterName
+     *
      * @return mixed
      */
     public function getAdapter($adapterName)

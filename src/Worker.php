@@ -48,6 +48,11 @@ class Worker
     private $stopping = false;
 
     /**
+     * @var int
+     */
+    private $statsLoggingInterval = 600;
+
+    /**
      * Worker constructor.
      *
      * @param LoopInterface    $loop
@@ -62,6 +67,7 @@ class Worker
         $this->adaptersRegistry = $adaptersRegistry;
         $this->logger = $logger;
         $this->startPeriodicTimer();
+        $this->startStatsPeriodicTimer();
     }
 
     /**
@@ -112,17 +118,28 @@ class Worker
                     }
                 } else {
                     $this->logger->info('Job finished. ID: '.$job->getId());
-                    $this->logger->info('Work time: '.(time() - $job->getStartTime(false)));
-                    $this->logger->info('Total requests: '.$job->getSpider()->getStatistic()->getTotalRequests());
-                    $this->logger->info('Success requests: '.$job->getSpider()->getStatistic()->getSuccessRequests());
-                    $this->logger->info('Failed requests: '.$job->getSpider()->getStatistic()->getFailedRequests());
-                    $this->logger->info('Average requests per second: '.$job->getSpider()->getStatistic()->getRequestsPerSecond());
+                    $this->logJobStats($job);
                     $this->finishedJobs[] = $job;
                     unset($this->activeJobs[$key]);
                     $this->activeJobs = array_values($this->activeJobs);
                     if (!$this->activeJobs) {
                         $this->client->end();
                     }
+                }
+            }
+        });
+    }
+
+    /**
+     * Start timer for logging stats for running jobs
+     */
+    private function startStatsPeriodicTimer()
+    {
+        $this->loop->addPeriodicTimer($this->statsLoggingInterval, function() {
+            foreach ($this->activeJobs as $job) {
+                if ($job->getSpider()->isActive()) {
+                    $this->logger->info('Job in progress. ID: '.$job->getId());
+                    $this->logJobStats($job);
                 }
             }
         });
@@ -150,5 +167,17 @@ class Worker
     public function isStopped()
     {
         return $this->stopped;
+    }
+
+    /**
+     * @param Job $job
+     */
+    private function logJobStats(Job $job)
+    {
+        $this->logger->info('Work time: '.(time() - $job->getStartTime(false)).' seconds');
+        $this->logger->info('Total requests: '.$job->getSpider()->getStatistic()->getTotalRequests());
+        $this->logger->info('Success requests: '.$job->getSpider()->getStatistic()->getSuccessRequests());
+        $this->logger->info('Failed requests: '.$job->getSpider()->getStatistic()->getFailedRequests());
+        $this->logger->info('Average requests per second: '.$job->getSpider()->getStatistic()->getRequestsPerSecond());
     }
 }

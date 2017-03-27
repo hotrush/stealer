@@ -8,7 +8,8 @@ class MiddlewaresTest extends \PHPUnit_Framework_TestCase
     {
         $proxyMiddleware = \Hotrush\Stealer\Middleware::proxy('127.0.0.1');
         $this->assertTrue(is_callable($proxyMiddleware));
-        $result = $proxyMiddleware(function() {});
+        $result = $proxyMiddleware(function() {
+        });
         $this->assertInstanceOf(\Hotrush\Stealer\Middleware\ProxyMiddleware::class, $result);
         $this->assertAttributeEquals('127.0.0.1', 'address', $result);
     }
@@ -17,13 +18,14 @@ class MiddlewaresTest extends \PHPUnit_Framework_TestCase
     {
         $userAgentMiddleware = \Hotrush\Stealer\Middleware::userAgent();
         $this->assertTrue(is_callable($userAgentMiddleware));
-        $result = $userAgentMiddleware(function() {});
+        $result = $userAgentMiddleware(function() {
+        });
         $this->assertInstanceOf(\Hotrush\Stealer\Middleware\UserAgentMiddleware::class, $result);
     }
 
     public function testProxyMiddleware()
     {
-        $m = new \Hotrush\Stealer\Middleware\ProxyMiddleware(function($request, $options) {
+        $m = new \Hotrush\Stealer\Middleware\ProxyMiddleware(function ($request, $options) {
             $this->assertEquals('127.0.0.1', $options['proxy']);
         }, '127.0.0.1');
 
@@ -33,7 +35,7 @@ class MiddlewaresTest extends \PHPUnit_Framework_TestCase
 
     public function testUserAgentMiddleware()
     {
-        $m = new \Hotrush\Stealer\Middleware\UserAgentMiddleware(function(\Psr\Http\Message\RequestInterface $request, $options) {
+        $m = new \Hotrush\Stealer\Middleware\UserAgentMiddleware(function (\Psr\Http\Message\RequestInterface $request, $options) {
             $this->assertEquals('Stealer 0.0.0', $request->getHeader('User-Agent'));
         });
 
