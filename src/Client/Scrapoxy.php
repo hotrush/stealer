@@ -41,6 +41,7 @@ class Scrapoxy extends AbstractClient
         $stack = HandlerStack::create($handler);
         $stack->push(Middleware::proxy(getenv('SCRAPOXY_PROXY')));
         $stack->push(Middleware::userAgent());
+
         return new GuzzleClient([
             'handler' => $stack,
         ]);
