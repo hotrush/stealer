@@ -19,7 +19,7 @@ class Guzzle extends AbstractClient
         $handler = new HttpClientAdapter($this->loop, null, $dnsResolver);
         $stack = HandlerStack::create($handler);
         $stack->push(Middleware::userAgent());
-        $this->client = new GuzzleClient([
+        return new GuzzleClient([
             'handler' => $stack,
         ]);
     }

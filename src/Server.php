@@ -5,6 +5,8 @@ namespace Hotrush\Stealer;
 use Hotrush\Stealer\Spider\Registry;
 use Monolog\Logger;
 use React\EventLoop\LoopInterface;
+use React\Http\Request;
+use React\Http\Response;
 use React\Http\Server as HttpServer;
 use React\Socket\Server as SocketServer;
 
@@ -71,7 +73,7 @@ class Server
         $socket = new SocketServer($this->loop);
         $http = new HttpServer($socket);
         $api = new Api($this->registry, $this->logger, $this->worker);
-        $http->on('request', function ($request, $response) use ($api) {
+        $http->on('request', function (Request $request, Response $response) use ($api) {
             $api->processRequest($request, $response);
         });
         $socket->listen($this->port);

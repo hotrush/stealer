@@ -9,13 +9,21 @@ use React\EventLoop\LoopInterface;
 class Config
 {
     /**
-     * @param $configPath
+     * @param string $configPath
      */
     public static function load($configPath)
     {
         (new Loader($configPath))
             ->parse()
             ->putenv();
+    }
+
+    /**
+     * @param string $logDir
+     */
+    public static function setLogsDir($logDir)
+    {
+        putenv('LOG_DIR='.$logDir);
     }
 
     /**

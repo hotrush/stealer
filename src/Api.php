@@ -6,7 +6,6 @@ use Hotrush\Stealer\Spider\Registry;
 use Monolog\Logger;
 use React\Http\Request;
 use React\Http\Response;
-use React\Promise\Deferred;
 
 class Api
 {
@@ -47,58 +46,54 @@ class Api
             return;
         }
 
-        $this->getEndpointAndPayload($request)
-            ->then(function ($data) use ($response, $request) {
-                list($action, $payload) = $data;
-
-                if (!method_exists($this, $action)) {
-                    $this->replyWithError(404, 'Not found.', $response);
-
-                    return;
-                }
-
-                $this->$action($payload, $response);
-            }, function ($reason) use ($response) {
-                $this->replyWithError(500, $reason, $response);
-            });
-    }
-
-    private function getEndpointAndPayload(Request $request)
-    {
-        $deferred = new Deferred();
         $endpoint = substr($request->getPath(), 1).'Action';
         $data = [];
 
-        // @todo DO SOMETHING WITH REQUESTS WITHOUT PAYLOAD !!!!
         $this->logger->info(substr($request->getPath(), 1).' action requested');
 
-        $request->on('data', function ($requestData) use ($deferred, &$data, $endpoint) {
+        $request->on('data', function ($requestData) use (&$data, $endpoint, $response) {
             $data = json_decode($requestData, true);
             if ($data === false) {
-                $deferred->reject('Invalid payload.');
+                $this->replyWithError(400, 'Invalid payload.', $response);
+
+                return;
             }
             $this->logger->info('Request payload: '.$requestData);
         });
 
-        $request->on('end', function () use ($deferred, &$data, $endpoint) {
-            $deferred->resolve([$endpoint, $data]);
+        $request->on('end', function () use (&$data, $endpoint, $response) {
+            if (!method_exists($this, $endpoint)) {
+                $this->replyWithError(404, 'Not found.', $response);
+
+                return;
+            }
+
+            $this->$endpoint($data, $response);
         });
 
-        $request->on('error', function () use ($deferred) {
+        $request->on('error', function () use ($response) {
             $this->logger->error('Error occurred while data receiving.');
-            $deferred->reject('Error occurred while data receiving.');
+            $this->replyWithError(500, 'Error occurred while data receiving.', $response);
         });
 
-        return $deferred->promise();
+        $request->close();
     }
 
-    public function replyWithError($code, $error, Response $response)
+    private function replyWithError($code, $error, Response $response)
     {
         $this->logger->error('Api responded with '.$code.' status code and error message: '.$error);
         $response->writeHead($code, ['Content-Type' => 'application/json']);
         $response->end(json_encode([
             'message' => $error ? $error : 'Error occurred.',
         ]));
+    }
+
+    private function replyWithJson(array $data, Response $response)
+    {
+        $dataEncoded = json_encode($data);
+        $this->logger->info('Ape responded with 200 status code and data: '.$dataEncoded);
+        $response->writeHead(200, ['Content-Type' => 'application/json; charset=utf-8']);
+        $response->end($dataEncoded);
     }
 
     private function scheduleAction(array $payload, Response $response)
@@ -112,11 +107,10 @@ class Api
         $spider = $this->registry->getSpider($payload['spider']);
         $jobId = $this->worker->runSpiderJob($spider);
 
-        $response->writeHead(200, ['Content-Type' => 'application/json; charset=utf-8']);
-        $response->end(json_encode(['message' => 'Job scheduled', 'job_id' => $jobId]));
+        $this->replyWithJson(['message' => 'Job scheduled', 'job_id' => $jobId], $response);
     }
 
-    private function listjobsAction(array $payload, Response $response)
+    private function listAction(array $payload, Response $response)
     {
         $activeJobs = [];
 
@@ -127,7 +121,22 @@ class Api
             ];
         }
 
-        $response->writeHead(200, ['Content-Type' => 'application/json; charset=utf-8']);
-        $response->end(json_encode(['active_jobs' => $activeJobs]));
+        $this->replyWithJson(['active_jobs' => $activeJobs], $response);
+    }
+
+    private function cancelAction(array $payload, Response $response)
+    {
+        if (!isset($payload['id'])) {
+            $this->replyWithError(400, 'No job id provided.', $response);
+
+            return;
+        }
+
+        try {
+            $this->worker->stopJob($payload['id']);
+            $this->replyWithJson([], $response);
+        } catch (\InvalidArgumentException $e) {
+            $this->replyWithError(400, $e->getMessage(), $response);
+        }
     }
 }

@@ -180,4 +180,35 @@ class Worker
         $this->logger->info('Failed requests: '.$job->getSpider()->getStatistic()->getFailedRequests());
         $this->logger->info('Average requests per second: '.$job->getSpider()->getStatistic()->getRequestsPerSecond());
     }
+
+    /**
+     * @param $id
+     *
+     * @return bool
+     */
+    public function hasActiveJob($id)
+    {
+        return isset($this->activeJobs[$id]);
+    }
+
+    /**
+     * Stops running job.
+     *
+     * @param $id
+     */
+    public function stopJob($id)
+    {
+        if (!$this->hasActiveJob($id)) {
+            throw new \InvalidArgumentException('No job with id '.$id.' was found');
+        }
+        $job = $this->activeJobs[$id];
+        $this->logger->info('Stopping the job. ID: '.$job->getId());
+        $this->logJobStats($job);
+        $this->finishedJobs[] = $job;
+        unset($this->activeJobs[$id]);
+        $this->activeJobs = array_values($this->activeJobs);
+        if (!$this->activeJobs) {
+            $this->client->end();
+        }
+    }
 }

@@ -32,8 +32,7 @@ abstract class AbstractClient
     {
         $this->loop = $loop;
         $this->logger = $logger;
-
-        $this->createClient();
+        $this->client = $this->createClient();
     }
 
     abstract protected function createClient();

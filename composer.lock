@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d518e9e54ac4758d4cef7749791f52bd",
+    "content-hash": "9a8b1721901c213d394508081d50c998",
     "packages": [
         {
             "name": "clue/buzz-react",
@@ -1652,16 +1652,16 @@
         },
         {
             "name": "hotrush/scrapoxy-react-client",
-            "version": "1.0.1",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hotrush/scrapoxy-react-client.git",
-                "reference": "508e97ac140ac9d4f6d4b12e31d1b4bf52bf79ba"
+                "reference": "69050f574310b3aa776e9c94ddcc26044c7e594d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hotrush/scrapoxy-react-client/zipball/508e97ac140ac9d4f6d4b12e31d1b4bf52bf79ba",
-                "reference": "508e97ac140ac9d4f6d4b12e31d1b4bf52bf79ba",
+                "url": "https://api.github.com/repos/hotrush/scrapoxy-react-client/zipball/69050f574310b3aa776e9c94ddcc26044c7e594d",
+                "reference": "69050f574310b3aa776e9c94ddcc26044c7e594d",
                 "shasum": ""
             },
             "require": {
@@ -1693,7 +1693,7 @@
                 }
             ],
             "description": "Async client for Scrapoxy and ReactPHP",
-            "time": "2017-03-14T22:11:02+00:00"
+            "time": "2017-03-27T19:47:43+00:00"
         },
         {
             "name": "myclabs/deep-copy",
