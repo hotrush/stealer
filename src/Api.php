@@ -51,7 +51,7 @@ class Api
 
         $this->logger->info(substr($request->getPath(), 1).' action requested');
 
-        $request->on('data', function ($requestData) use (&$data, $endpoint, $response) {
+        $request->on('data', function ($requestData) use (&$data, $response) {
             $data = json_decode($requestData, true);
             if ($data === false) {
                 $this->replyWithError(400, 'Invalid payload.', $response);
@@ -91,7 +91,7 @@ class Api
     private function replyWithJson(array $data, Response $response)
     {
         $dataEncoded = json_encode($data);
-        $this->logger->info('Ape responded with 200 status code and data: '.$dataEncoded);
+        $this->logger->info('Api responded with 200 status code and data: '.$dataEncoded);
         $response->writeHead(200, ['Content-Type' => 'application/json; charset=utf-8']);
         $response->end($dataEncoded);
     }

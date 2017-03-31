@@ -87,13 +87,17 @@ class Worker
         return $jobId;
     }
 
+    /**
+     * Stop the worker. Finish jobs.
+     */
     public function stop()
     {
         $this->stopping = true;
         $this->logger->info('Stopping all jobs');
         if ($this->activeJobs) {
             foreach ($this->activeJobs as $job) {
-                // @todo do any job end task
+                $this->logger->info('Stopping job. ID: '.$job->getId());
+                $this->logJobStats($job);
             }
         }
         $this->stopped = true;

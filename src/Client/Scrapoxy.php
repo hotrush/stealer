@@ -77,7 +77,6 @@ class Scrapoxy extends AbstractClient
                         });
                     },
                     function ($reason) {
-                        // @todo throw an error and stop spider
                         $this->logger->error('Error while scaling: '.((string) $reason));
                         $this->waiting = false;
                         $this->scrapoxyScaled = false;
@@ -108,7 +107,6 @@ class Scrapoxy extends AbstractClient
                     },
                     function ($reason) {
                         $this->logger->error('Error while scaling down: '.((string) $reason));
-                        // @todo throw an error and stop spider
                         $this->waiting = false;
                         $this->scrapoxyScaled = false;
                     }

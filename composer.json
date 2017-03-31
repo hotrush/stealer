@@ -1,5 +1,7 @@
 {
     "name": "hotrush/stealer",
+    "description": "Async website scrapper tool like scrapy.",
+    "license": "MIT",
     "authors": [
         {
             "name": "hotrush",
