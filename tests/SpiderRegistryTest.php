@@ -34,6 +34,7 @@ class SpiderRegistryTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($this->spidersArray, 'spiders', $this->registry);
         $this->assertEquals($this->spidersArray, $this->registry->getSpiders());
         $this->assertEquals($this->spiderAbstract, $this->registry->getSpider('test'));
+        $this->assertTrue($this->registry->spiderExists('test'));
     }
 
     public function testGetInvalidException()

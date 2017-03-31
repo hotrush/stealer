@@ -21,8 +21,8 @@
         "guzzlehttp/guzzle": "~6.0",
         "symfony/dom-crawler": "^3.2",
         "symfony/css-selector": "^3.2",
-        "hotrush/react-guzzle-http-client": "3.0.7",
-        "hotrush/react-guzzle-psr7": "1.0.3",
+        "wyrihaximus/react-guzzle-http-client": "^4.0",
+        "wyrihaximus/react-guzzle-psr7": "^2.0",
         "josegonzalez/dotenv": "^2.1",
         "monolog/monolog": "^1.22",
         "mkraemer/react-pcntl": "^2.2"
@@ -41,16 +41,6 @@
     "autoload-dev": {
         "psr-4": {
             "Hotrush\\Stealer\\Tests\\": "tests/"
-        }
-    },
-    "repositories": {
-        "repo": {
-            "type": "git",
-            "url": "https://github.com/hotrush/react-guzzle-http-client.git"
-        },
-        "repo2": {
-            "type": "git",
-            "url": "https://github.com/hotrush/react-guzzle-psr7.git"
         }
     },
     "suggest": {

@@ -14,7 +14,7 @@ class SpiderRequestTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(500, $reason->getCode());
             $loop->stop();
         };
-        $spiderRequest = new \Hotrush\Stealer\Spider\Request('GET', 'https://httpbin.org/', $success, $failed);
+        $spiderRequest = new \Hotrush\Stealer\Spider\Request('GET', 'https://httpbin.org/', [], $success, $failed);
         $this->assertAttributeEquals('GET', 'method', $spiderRequest);
         $this->assertAttributeEquals('https://httpbin.org/', 'uri', $spiderRequest);
         $this->assertAttributeEquals($success, 'callback', $spiderRequest);
@@ -22,7 +22,7 @@ class SpiderRequestTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMockBuilder(\Monolog\Logger::class)->setConstructorArgs(['test'])->getMock();
         $client = new \Hotrush\Stealer\Client\Guzzle($loop, $logger);
         $spiderRequest->send($client);
-        $spiderRequest = new \Hotrush\Stealer\Spider\Request('GET', 'https://httpbin.org/status/500', $success, $failed);
+        $spiderRequest = new \Hotrush\Stealer\Spider\Request('GET', 'https://httpbin.org/status/500', [], $success, $failed);
         $spiderRequest->send($client);
         $loop->run();
     }
