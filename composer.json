@@ -1,6 +1,6 @@
 {
     "name": "hotrush/stealer",
-    "description": "Async website scrapper tool like scrapy.",
+    "description": "Async website scrapper tool like scrapy built with reactphp.",
     "license": "MIT",
     "authors": [
         {
