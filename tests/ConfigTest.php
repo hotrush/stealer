@@ -19,7 +19,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         Config::setLogsDir('testDir');
         $this->assertEquals('testDir', getenv('LOG_DIR'));
     }
-    
+
     public function testLoadAdapters()
     {
         $loop = \React\EventLoop\Factory::create();
