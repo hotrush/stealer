@@ -37,7 +37,6 @@ class SpiderStatisticTest extends \PHPUnit_Framework_TestCase
         $statistic->incrementSuccessRequests(2);
         $this->assertAttributeEquals(3, 'successRequests', $statistic);
         $this->assertEquals(3, $statistic->getSuccessRequests());
-        $this->assertEquals(0, $statistic->getRequestsPerSecond());
     }
 
     public function testRequestsPerSecond()
