@@ -182,6 +182,7 @@ class Worker
         $this->logger->info('Total requests: '.$job->getSpider()->getStatistic()->getTotalRequests());
         $this->logger->info('Success requests: '.$job->getSpider()->getStatistic()->getSuccessRequests());
         $this->logger->info('Failed requests: '.$job->getSpider()->getStatistic()->getFailedRequests());
+        $this->logger->info('Active requests: '.$job->getSpider()->getStatistic()->getActiveRequests());
         $this->logger->info('Average requests per second: '.$job->getSpider()->getStatistic()->getRequestsPerSecond());
     }
 
