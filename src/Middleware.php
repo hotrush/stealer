@@ -3,6 +3,7 @@
 namespace Hotrush\Stealer;
 
 use Hotrush\Stealer\Middleware\ProxyMiddleware;
+use Hotrush\Stealer\Middleware\RandomUserAgentMiddleware;
 use Hotrush\Stealer\Middleware\UserAgentMiddleware;
 
 class Middleware
@@ -26,6 +27,13 @@ class Middleware
     {
         return function (callable $handler) {
             return new UserAgentMiddleware($handler);
+        };
+    }
+
+    public static function randomUserAgent()
+    {
+        return function (callable $handler) {
+            return new RandomUserAgentMiddleware($handler);
         };
     }
 }
