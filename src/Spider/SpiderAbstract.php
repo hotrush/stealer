@@ -104,6 +104,7 @@ abstract class SpiderAbstract
             $request = array_shift($this->requests);
 
             if ($request) {
+                $this->statistic->incrementTotalRequests();
                 $this->statistic->incrementActiveRequests();
                 $request->send($this->getClient());
             }

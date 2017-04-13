@@ -47,7 +47,7 @@ class Scrapoxy extends AbstractClient
         ]);
     }
 
-    protected function getScrapoxtClient()
+    protected function getScrapoxyClient()
     {
         if (!$this->scrapoxyClient) {
             $this->scrapoxyClient = new Client(getenv('API_SCRAPOXY'), getenv('API_SCRAPOXY_PASSWORD'), $this->loop);
@@ -67,7 +67,7 @@ class Scrapoxy extends AbstractClient
         if (!$this->scrapoxyScaled) {
             $this->logger->info('Scaling scrapoxy');
             $this->waiting = true;
-            $this->getScrapoxtClient()->upScale()
+            $this->getScrapoxyClient()->upScale()
                 ->then(
                     function () {
                         $this->logger->info('Waiting for scaling: '.$this->scalingDelay.'sec');
@@ -96,10 +96,10 @@ class Scrapoxy extends AbstractClient
         if ($this->scrapoxyScaled) {
             $this->logger->info('Downscaling scrapoxy');
             $this->waiting = true;
-            $this->getScrapoxtClient()->downScale()
+            $this->getScrapoxyClient()->downScale()
                 ->then(
                     function () {
-                        $this->logger->info('Waiting for scaling: '.$this->scalingDelay.'sec');
+                        $this->logger->info('Waiting for downscaling: '.$this->scalingDelay.'sec');
                         $this->loop->addTimer($this->scalingDelay, function () {
                             $this->scrapoxyScaled = true;
                             $this->waiting = false;

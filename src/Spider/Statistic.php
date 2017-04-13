@@ -118,6 +118,6 @@ class Statistic
      */
     public function getRequestsPerSecond()
     {
-        return time() > $this->startTime ? round($this->totalRequests / (time() - $this->startTime), 2) : 0;
+        return time() > $this->startTime ? round(($this->successRequests + $this->failedRequests) / (time() - $this->startTime), 2) : 0;
     }
 }

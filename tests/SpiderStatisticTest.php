@@ -37,14 +37,15 @@ class SpiderStatisticTest extends \PHPUnit_Framework_TestCase
         $statistic->incrementSuccessRequests(2);
         $this->assertAttributeEquals(3, 'successRequests', $statistic);
         $this->assertEquals(3, $statistic->getSuccessRequests());
-        $this->assertEquals(0, $statistic->getRequestsPerSecond());
     }
 
     public function testRequestsPerSecond()
     {
-        $time = time() - 3;
+        $time = time() - 2;
         $statistic = new \Hotrush\Stealer\Spider\Statistic($time);
         $statistic->incrementTotalRequests(9);
-        $this->assertEquals(3, $statistic->getRequestsPerSecond());
+        $statistic->incrementSuccessRequests(3);
+        $statistic->incrementFailedRequests(1);
+        $this->assertEquals(2, $statistic->getRequestsPerSecond());
     }
 }
