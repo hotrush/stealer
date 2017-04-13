@@ -68,7 +68,9 @@ class Statistic
      */
     public function decrementActiveRequests($num = 1)
     {
-        $this->activeRequests -= (int) $num;
+        if ($this->activeRequests > 0) {
+            $this->activeRequests -= (int) $num;
+        }
     }
 
     /**
