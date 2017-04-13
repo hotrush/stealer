@@ -29,7 +29,7 @@ class Middleware
             return new UserAgentMiddleware($handler);
         };
     }
-    
+
     public static function randomUserAgent()
     {
         return function (callable $handler) {
