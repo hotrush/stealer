@@ -46,29 +46,38 @@ class Api
             return;
         }
 
+        if (!$request->hasHeader('Content-Length')) {
+            $this->replyWithError(400, 'No content-length header provided', $response);
+
+            return;
+        }
+
+        if (((int) $request->getHeader('Content-Length')[0]) === 0) {
+            $this->replyWithError(400, 'Content-length header saying that no payload provided', $response);
+
+            return;
+        }
+
         $endpoint = substr($request->getPath(), 1).'Action';
         $data = [];
 
+        if (!method_exists($this, $endpoint)) {
+            $this->replyWithError(404, 'Not found.', $response);
+
+            return;
+        }
+
         $this->logger->info(substr($request->getPath(), 1).' action requested');
 
-        $request->on('data', function ($requestData) use (&$data, $response) {
+        $request->on('data', function ($requestData) use (&$data, $endpoint, $response) {
             $data = json_decode($requestData, true);
             if ($data === false) {
                 $this->replyWithError(400, 'Invalid payload.', $response);
 
                 return;
             }
-            $this->logger->info('Request payload: '.$requestData);
-        });
-
-        $request->on('end', function () use (&$data, $endpoint, $response) {
-            if (!method_exists($this, $endpoint)) {
-                $this->replyWithError(404, 'Not found.', $response);
-
-                return;
-            }
-
             $this->$endpoint($data, $response);
+            $this->logger->info('Request payload: '.$requestData);
         });
 
         $request->on('error', function () use ($response) {
