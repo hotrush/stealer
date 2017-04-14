@@ -84,8 +84,6 @@ class Api
             $this->logger->error('Error occurred while data receiving.');
             $this->replyWithError(500, 'Error occurred while data receiving.', $response);
         });
-
-        $request->close();
     }
 
     private function replyWithError($code, $error, Response $response)
