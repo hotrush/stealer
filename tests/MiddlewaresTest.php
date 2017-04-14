@@ -2,6 +2,8 @@
 
 namespace Hotrush\Stealer\Tests;
 
+use GuzzleHttp\Psr7\Request;
+
 class MiddlewaresTest extends \PHPUnit_Framework_TestCase
 {
     public function testProxyMiddlewaresAdding()
@@ -41,6 +43,16 @@ class MiddlewaresTest extends \PHPUnit_Framework_TestCase
 
         $request = $this->getMockBuilder(\Psr\Http\Message\RequestInterface::class)->getMock();
         $request->method('getHeader')->with('User-Agent')->willReturn('Stealer 0.0.0');
+        $m($request, []);
+    }
+
+    public function testRandomUserAgentMiddleware()
+    {
+        $m = new \Hotrush\Stealer\Middleware\RandomUserAgentMiddleware(function (\Psr\Http\Message\RequestInterface $request, $options) {
+            $this->assertTrue($request->hasHeader('User-Agent'));
+        });
+
+        $request = new Request('GET', 'dummy');
         $m($request, []);
     }
 }
