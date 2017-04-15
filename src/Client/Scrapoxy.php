@@ -78,8 +78,8 @@ class Scrapoxy extends AbstractClient
                     },
                     function ($reason) {
                         $this->logger->error('Error while scaling: '.((string) $reason));
-                        $this->waiting = false;
                         $this->scrapoxyScaled = false;
+                        $this->waiting = false;
                     }
                 );
         }
@@ -101,14 +101,14 @@ class Scrapoxy extends AbstractClient
                     function () {
                         $this->logger->info('Waiting for downscaling: '.$this->scalingDelay.'sec');
                         $this->loop->addTimer($this->scalingDelay, function () {
-                            $this->scrapoxyScaled = true;
+                            $this->scrapoxyScaled = false;
                             $this->waiting = false;
                         });
                     },
                     function ($reason) {
                         $this->logger->error('Error while scaling down: '.((string) $reason));
-                        $this->waiting = false;
                         $this->scrapoxyScaled = false;
+                        $this->waiting = false;
                     }
                 );
         }
