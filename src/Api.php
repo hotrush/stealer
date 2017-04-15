@@ -40,25 +40,7 @@ class Api
 
     public function processRequest(Request $request, Response $response)
     {
-        if ($request->getMethod() !== 'POST') {
-            $this->replyWithError(405, 'Method now allowed.', $response);
-
-            return;
-        }
-
-        if (!$request->hasHeader('Content-Length')) {
-            $this->replyWithError(400, 'No content-length header provided', $response);
-
-            return;
-        }
-
-        if (((int) $request->getHeader('Content-Length')[0]) === 0) {
-            $this->replyWithError(400, 'Content-length header saying that no payload provided', $response);
-
-            return;
-        }
-
-        $endpoint = substr($request->getPath(), 1).'Action';
+        $endpoint = substr($request->getPath(), 1).(ucfirst(strtolower($request->getMethod()))).'Action';
         $data = [];
 
         if (!method_exists($this, $endpoint)) {
@@ -67,18 +49,23 @@ class Api
             return;
         }
 
-        $this->logger->info(substr($request->getPath(), 1).' action requested');
+        $this->logger->info($endpoint.' endpoint requested');
 
-        $request->on('data', function ($requestData) use (&$data, $endpoint, $response) {
-            $data = json_decode($requestData, true);
-            if ($data === false) {
-                $this->replyWithError(400, 'Invalid payload.', $response);
+        if ($request->hasHeader('Content-Length') && ((int) $request->getHeader('Content-Length')[0]) > 0) {
+            $request->on('data', function ($requestData) use (&$data, $endpoint, $response) {
+                $data = json_decode($requestData, true);
+                if ($data === false) {
+                    $this->replyWithError(400, 'Invalid payload.', $response);
 
-                return;
-            }
-            $this->$endpoint($data, $response);
-            $this->logger->info('Request payload: '.$requestData);
-        });
+                    return;
+                }
+                $this->logger->info('Request payload: '.$requestData);
+                $this->$endpoint($response, $data);
+            });
+        } else {
+            $this->logger->info('No payload received');
+            $this->$endpoint($response);
+        }
 
         $request->on('error', function () use ($response) {
             $this->logger->error('Error occurred while data receiving.');
@@ -103,7 +90,7 @@ class Api
         $response->end($dataEncoded);
     }
 
-    private function scheduleAction(array $payload, Response $response)
+    private function schedulePostAction(Response $response, array $payload = [])
     {
         if (!isset($payload['spider']) || !$this->registry->spiderExists($payload['spider'])) {
             $this->replyWithError(400, 'No spider found', $response);
@@ -117,7 +104,7 @@ class Api
         $this->replyWithJson(['message' => 'Job scheduled', 'job_id' => $jobId], $response);
     }
 
-    private function listAction(array $payload, Response $response)
+    private function listGetAction(Response $response)
     {
         $activeJobs = [];
 
@@ -131,7 +118,7 @@ class Api
         $this->replyWithJson(['active_jobs' => $activeJobs], $response);
     }
 
-    private function cancelAction(array $payload, Response $response)
+    private function cancelPostAction(Response $response, array $payload = [])
     {
         if (!isset($payload['id'])) {
             $this->replyWithError(400, 'No job id provided.', $response);
