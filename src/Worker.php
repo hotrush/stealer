@@ -2,7 +2,7 @@
 
 namespace Hotrush\Stealer;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
 
 class Worker
@@ -23,7 +23,7 @@ class Worker
     private $adaptersRegistry;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -58,9 +58,9 @@ class Worker
      * @param LoopInterface    $loop
      * @param AbstractClient   $client
      * @param AdaptersRegistry $adaptersRegistry
-     * @param Logger           $logger
+     * @param LoggerInterface  $logger
      */
-    public function __construct(LoopInterface $loop, AbstractClient $client, AdaptersRegistry $adaptersRegistry, Logger $logger)
+    public function __construct(LoopInterface $loop, AbstractClient $client, AdaptersRegistry $adaptersRegistry, LoggerInterface $logger)
     {
         $this->loop = $loop;
         $this->client = $client;
@@ -82,7 +82,7 @@ class Worker
         $jobId = $job->getId();
         $job->initLogger();
         $this->activeJobs[$jobId] = $job;
-        $this->logger->info('Job started. Spider: '.$spiderName.'. ID: '.$jobId);
+        $this->logger->info(sprintf('Job started. Spider: %s. ID: %s', $spiderName, $jobId));
 
         return $jobId;
     }
@@ -96,7 +96,7 @@ class Worker
         $this->logger->info('Stopping all jobs');
         if ($this->activeJobs) {
             foreach ($this->activeJobs as $job) {
-                $this->logger->info('Stopping job. ID: '.$job->getId());
+                $this->logger->info(sprintf('Stopping job. ID: %s', $job->getId()));
                 $this->logJobStats($job);
             }
         }
@@ -121,7 +121,7 @@ class Worker
                         $this->client->start();
                     }
                 } else {
-                    $this->logger->info('Job finished. ID: '.$job->getId());
+                    $this->logger->info(sprintf('Job finished. ID: %s', $job->getId()));
                     $this->logJobStats($job);
                     $this->finishedJobs[] = $job;
                     unset($this->activeJobs[$key]);
@@ -142,7 +142,7 @@ class Worker
         $this->loop->addPeriodicTimer($this->statsLoggingInterval, function () {
             foreach ($this->activeJobs as $job) {
                 if ($job->getSpider()->isActive()) {
-                    $this->logger->info('Job in progress. ID: '.$job->getId());
+                    $this->logger->info(sprintf('Job in progress. ID: %s', $job->getId()));
                     $this->logJobStats($job);
                 }
             }
@@ -178,12 +178,12 @@ class Worker
      */
     private function logJobStats(Job $job)
     {
-        $this->logger->info('Work time: '.(time() - $job->getStartTime(false)).' seconds');
-        $this->logger->info('Total requests: '.$job->getSpider()->getStatistic()->getTotalRequests());
-        $this->logger->info('Success requests: '.$job->getSpider()->getStatistic()->getSuccessRequests());
-        $this->logger->info('Failed requests: '.$job->getSpider()->getStatistic()->getFailedRequests());
-        $this->logger->info('Active requests: '.$job->getSpider()->getStatistic()->getActiveRequests());
-        $this->logger->info('Average requests per second: '.$job->getSpider()->getStatistic()->getRequestsPerSecond());
+        $this->logger->info(sprintf('Work time: %d seconds', time() - $job->getStartTime(false)));
+        $this->logger->info(sprintf('Total requests: %d', $job->getSpider()->getStatistic()->getTotalRequests()));
+        $this->logger->info(sprintf('Success requests: %d', $job->getSpider()->getStatistic()->getSuccessRequests()));
+        $this->logger->info(sprintf('Failed requests: %d', $job->getSpider()->getStatistic()->getFailedRequests()));
+        $this->logger->info(sprintf('Active requests: %d', $job->getSpider()->getStatistic()->getActiveRequests()));
+        $this->logger->info(sprintf('Average requests per second: %d', $job->getSpider()->getStatistic()->getRequestsPerSecond()));
     }
 
     /**
@@ -204,10 +204,10 @@ class Worker
     public function stopJob($id)
     {
         if (!$this->hasActiveJob($id)) {
-            throw new \InvalidArgumentException('No job with id '.$id.' was found');
+            throw new \InvalidArgumentException(sprintf('No job with id %s was found', $id));
         }
         $job = $this->activeJobs[$id];
-        $this->logger->info('Stopping the job. ID: '.$job->getId());
+        $this->logger->info(sprintf('Stopping the job. ID: %s', $job->getId()));
         $this->logJobStats($job);
         $this->finishedJobs[] = $job;
         unset($this->activeJobs[$id]);

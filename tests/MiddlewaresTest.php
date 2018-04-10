@@ -3,8 +3,9 @@
 namespace Hotrush\Stealer\Tests;
 
 use GuzzleHttp\Psr7\Request;
+use PHPUnit\Framework\TestCase;
 
-class MiddlewaresTest extends \PHPUnit_Framework_TestCase
+class MiddlewaresTest extends TestCase
 {
     public function testProxyMiddlewaresAdding()
     {

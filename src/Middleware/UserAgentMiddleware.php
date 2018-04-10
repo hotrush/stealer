@@ -2,6 +2,7 @@
 
 namespace Hotrush\Stealer\Middleware;
 
+use Hotrush\Stealer\App;
 use Psr\Http\Message\RequestInterface;
 
 class UserAgentMiddleware
@@ -17,7 +18,7 @@ class UserAgentMiddleware
     {
         $fn = $this->nextHandler;
 
-        $request->withHeader('User-Agent', 'Stealer 0.0.0');
+        $request->withHeader('User-Agent', sprintf('Stealer %s', App::$version));
 
         return $fn($request, $options);
     }

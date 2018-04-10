@@ -5,6 +5,7 @@ namespace Hotrush\Stealer;
 use Hotrush\Stealer\Spider\SpiderAbstract;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class Job
 {
@@ -24,7 +25,7 @@ class Job
     private $spider;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -69,6 +70,7 @@ class Job
      */
     public function initLogger()
     {
+        // @todo change log file name
         $this->logger = new Logger('job-'.$this->id);
         $this->logger->pushHandler(
             new StreamHandler(getenv('LOG_DIR').$this->id.'.log')

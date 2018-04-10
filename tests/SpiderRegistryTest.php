@@ -2,7 +2,9 @@
 
 namespace Hotrush\Stealer\Tests;
 
-class SpiderRegistryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class SpiderRegistryTest extends TestCase
 {
     /**
      * @var \Hotrush\Stealer\Spider\Registry

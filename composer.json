@@ -9,32 +9,24 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
-        "react/cache": "^0.4",
-        "react/child-process": "^0.4",
+        "php": ">=7.1",
+        "react/http": "^0.8",
+        "react/event-loop": "^0.5",
+        "react/socket": "^0.8",
         "react/dns": "^0.4",
-        "react/event-loop": "^0.4",
-        "react/http-client": "^0.4",
-        "react/http": "^0.4",
-        "react/promise": "~2.1",
-        "react/socket-client": "^0.5.3",
-        "react/socket": "^0.4",
-        "react/stream": "^0.4",
-        "guzzlehttp/guzzle": "^6.0",
+        "react/stream": "^0.7",
+        "react/promise": "~2.5",
         "symfony/dom-crawler": "^3.2",
         "symfony/css-selector": "^3.2",
-        "wyrihaximus/react-guzzle-http-client": "^4.0",
-        "wyrihaximus/react-guzzle-psr7": "^2.0",
         "josegonzalez/dotenv": "^2.1",
         "monolog/monolog": "^1.22",
-        "mkraemer/react-pcntl": "^2.2"
+        "nikic/fast-route": "^1.3",
+        "guzzlehttp/guzzle": "^6.0",
+        "wyrihaximus/react-guzzle-psr7": "^2.0",
+        "campo/random-user-agent": "^1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.0|^5.0",
-        "hotrush/scrapoxy-react-client": "^1.0",
-        "pda/pheanstalk": "^3.1",
-        "hotrush/reactphp-mysql": "^0.3",
-        "campo/random-user-agent": "^1.2"
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": {
@@ -47,9 +39,8 @@
         }
     },
     "suggest": {
-        "hotrush/scrapoxy-react-client": "Async scrapoxy api client",
-        "pda/pheanstalk": "Pheanstalk is a pure PHP 5.3+ client for the beanstalkd workqueue",
-        "hotrush/reactphp-mysql": "Async mysql client",
-        "campo/random-user-agent": "Generate real random user-agents."
+        "react/mysql": "Async client for mysql adapter",
+        "pda/pheanstalk": "Beanstalkd client for adapter",
+        "hotrush/stealer-scrapoxy-client": "Async scrapoxy client"
     }
 }

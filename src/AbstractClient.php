@@ -2,7 +2,7 @@
 
 namespace Hotrush\Stealer;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
 
 abstract class AbstractClient
@@ -13,7 +13,7 @@ abstract class AbstractClient
     protected $loop;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -25,10 +25,10 @@ abstract class AbstractClient
     /**
      * AbstractClient constructor.
      *
-     * @param LoopInterface $loop
-     * @param Logger        $logger
+     * @param LoopInterface   $loop
+     * @param LoggerInterface $logger
      */
-    public function __construct(LoopInterface $loop, Logger $logger)
+    public function __construct(LoopInterface $loop, LoggerInterface $logger)
     {
         $this->loop = $loop;
         $this->logger = $logger;
@@ -53,16 +53,25 @@ abstract class AbstractClient
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isStopped()
     {
         return true;
     }
 
+    /**
+     * Start the client.
+     */
     public function start()
     {
     }
 
-    public function end()
+    /**
+     * Stops the client.
+     */
+    public function stop()
     {
     }
 }
