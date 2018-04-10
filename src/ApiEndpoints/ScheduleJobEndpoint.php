@@ -30,7 +30,7 @@ class ScheduleJobEndpoint extends BaseEndpoint
             ],
             json_encode([
                 'message' => 'Job scheduled.',
-                'job_id' => $jobId,
+                'job_id'  => $jobId,
             ])
         );
     }
