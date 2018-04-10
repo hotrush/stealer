@@ -3,12 +3,10 @@
 namespace Hotrush\Stealer;
 
 use Hotrush\Stealer\Spider\Registry;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
-use React\Http\Request;
-use React\Http\Response;
 use React\Http\Server as HttpServer;
-use React\Socket\Server as SocketServer;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Server
 {
@@ -23,59 +21,40 @@ class Server
     private $registry;
 
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var Worker
      */
     private $worker;
 
     /**
-     * @var string
+     * @var LoggerInterface
      */
-    private $port = '8080';
+    private $logger;
 
     /**
      * Server constructor.
      *
-     * @param LoopInterface $loop
-     * @param Registry      $registry
-     * @param Logger        $logger
-     * @param Worker        $worker
+     * @param LoopInterface     $loop
+     * @param Registry          $registry
+     * @param Worker            $worker
+     * @param LoggerInterface   $logger
      */
-    public function __construct(LoopInterface $loop, Registry $registry, Logger $logger, Worker $worker)
+    public function __construct(LoopInterface $loop, Registry $registry, Worker $worker, LoggerInterface $logger)
     {
         $this->loop = $loop;
         $this->registry = $registry;
-        $this->logger = $logger;
         $this->worker = $worker;
+        $this->logger = $logger;
     }
 
-    /**
-     * Change api server port.
-     *
-     * @param $port
-     */
-    public function setPort($port)
-    {
-        $this->port = $port;
-    }
-
-    /**
-     * Start an api server.
-     *
-     * @throws \React\Socket\ConnectionException
-     */
     public function start()
     {
-        $socket = new SocketServer($this->loop);
-        $http = new HttpServer($socket);
-        $api = new Api($this->registry, $this->logger, $this->worker);
-        $http->on('request', function (Request $request, Response $response) use ($api) {
-            $api->processRequest($request, $response);
+        $api = new Api($this->registry, $this->worker, $this->logger);
+
+        $server = new HttpServer(function (ServerRequestInterface $request) use ($api) {
+            return $api->dispatchRequest($request);
         });
-        $socket->listen($this->port);
+
+        $socket = new \React\Socket\Server(getenv('SERVER_PORT'), $this->loop);
+        $server->listen($socket);
     }
 }

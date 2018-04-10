@@ -2,7 +2,9 @@
 
 namespace Hotrush\Stealer\Tests;
 
-class JobTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class JobTest extends TestCase
 {
     public function testJobCreating()
     {

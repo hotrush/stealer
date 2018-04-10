@@ -2,10 +2,14 @@
 
 namespace Hotrush\Stealer;
 
-use Hotrush\Stealer\Spider\Registry;
-use Monolog\Logger;
-use React\Http\Request;
 use React\Http\Response;
+use FastRoute\Dispatcher;
+use Psr\Log\LoggerInterface;
+use Hotrush\Stealer\Spider\Registry;
+use Psr\Http\Message\ServerRequestInterface;
+use Hotrush\Stealer\ApiEndpoints\ListJobsEndpoint;
+use Hotrush\Stealer\ApiEndpoints\CancelJobEndpoint;
+use Hotrush\Stealer\ApiEndpoints\ScheduleJobEndpoint;
 
 class Api
 {
@@ -15,122 +19,106 @@ class Api
     private $registry;
 
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var Worker
      */
     private $worker;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var Dispatcher
+     */
+    private $routeDispatcher;
+
+    /**
      * Api constructor.
      *
-     * @param Registry $registry
-     * @param Logger   $logger
-     * @param Worker   $worker
+     * @param Registry          $registry
+     * @param Worker            $worker
+     * @param LoggerInterface   $logger
      */
-    public function __construct(Registry $registry, Logger $logger, Worker $worker)
+    public function __construct(Registry $registry, Worker $worker, LoggerInterface $logger)
     {
-        $this->registry = $registry;
         $this->logger = $logger;
+        $this->registry = $registry;
         $this->worker = $worker;
+        $this->loadRouteDispatcher();
     }
 
-    public function processRequest(Request $request, Response $response)
+    /**
+     * @param ServerRequestInterface $request
+     * @return Response
+     */
+    public function dispatchRequest(ServerRequestInterface $request)
     {
-        $endpoint = substr($request->getPath(), 1).(ucfirst(strtolower($request->getMethod()))).'Action';
-        $data = [];
+        $routeInfo = $this->routeDispatcher->dispatch($request->getMethod(), $request->getUri()->getPath());
 
-        if (!method_exists($this, $endpoint)) {
-            $this->replyWithError(404, 'Not found.', $response);
+        $this->logger->info(sprintf('%s %s requested', $request->getMethod(), $request->getUri()->getPath()));
 
-            return;
+        switch ($routeInfo[0]) {
+            case Dispatcher::FOUND:
+                $response = call_user_func(new $routeInfo[1]($this->registry, $this->worker), $routeInfo[2]);
+                break;
+            case Dispatcher::NOT_FOUND:
+                $response = new Response(
+                    404,
+                    [
+                        'Content-Type' => 'application/json'
+                    ],
+                    json_encode([
+                        'message' => 'Not found.',
+                    ])
+                );
+                break;
+            case Dispatcher::METHOD_NOT_ALLOWED:
+                $response = new Response(
+                    405,
+                    [
+                        'Content-Type' => 'application/json'
+                    ],
+                    json_encode([
+                        'message' => 'Method not allowed.',
+                    ])
+                );
+                break;
+            default:
+                $response = new Response(
+                    500,
+                    [
+                        'Content-Type' => 'application/json'
+                    ],
+                    json_encode([
+                        'message' => 'Internal server error.',
+                    ])
+                );
+                break;
         }
 
-        $this->logger->info($endpoint.' endpoint requested');
+        $this->logger->info(
+            sprintf(
+                'Api responded with %s status code and body: %s',
+                $response->getStatusCode(),
+                $response->getBody()->getContents()
+            )
+        );
 
-        if ($request->hasHeader('Content-Length') && ((int) $request->getHeader('Content-Length')[0]) > 0) {
-            $request->on('data', function ($requestData) use (&$data, $endpoint, $response) {
-                $data = json_decode($requestData, true);
-                if ($data === false) {
-                    $this->replyWithError(400, 'Invalid payload.', $response);
-
-                    return;
-                }
-                $this->logger->info('Request payload: '.$requestData);
-                $this->$endpoint($response, $data);
-            });
-        } else {
-            $this->logger->info('No payload received');
-            $this->$endpoint($response);
-        }
-
-        $request->on('error', function () use ($response) {
-            $this->logger->error('Error occurred while data receiving.');
-            $this->replyWithError(500, 'Error occurred while data receiving.', $response);
-        });
+        return $response;
     }
 
-    private function replyWithError($code, $error, Response $response)
+    /**
+     * Define routes dispatcher
+     */
+    private function loadRouteDispatcher()
     {
-        $this->logger->error('Api responded with '.$code.' status code and error message: '.$error);
-        $response->writeHead($code, ['Content-Type' => 'application/json']);
-        $response->end(json_encode([
-            'message' => $error ? $error : 'Error occurred.',
-        ]));
-    }
-
-    private function replyWithJson(array $data, Response $response)
-    {
-        $dataEncoded = json_encode($data);
-        $this->logger->info('Api responded with 200 status code and data: '.$dataEncoded);
-        $response->writeHead(200, ['Content-Type' => 'application/json; charset=utf-8']);
-        $response->end($dataEncoded);
-    }
-
-    private function schedulePostAction(Response $response, array $payload = [])
-    {
-        if (!isset($payload['spider']) || !$this->registry->spiderExists($payload['spider'])) {
-            $this->replyWithError(400, 'No spider found', $response);
-
-            return;
-        }
-
-        $spider = $this->registry->getSpider($payload['spider']);
-        $jobId = $this->worker->runSpiderJob($spider);
-
-        $this->replyWithJson(['message' => 'Job scheduled', 'job_id' => $jobId], $response);
-    }
-
-    private function listGetAction(Response $response)
-    {
-        $activeJobs = [];
-
-        foreach ($this->worker->getActiveJobs() as $item) {
-            $activeJobs[] = [
-                'id'         => $item->getId(),
-                'time_start' => $item->getStartTime(),
-            ];
-        }
-
-        $this->replyWithJson(['active_jobs' => $activeJobs], $response);
-    }
-
-    private function cancelPostAction(Response $response, array $payload = [])
-    {
-        if (!isset($payload['id'])) {
-            $this->replyWithError(400, 'No job id provided.', $response);
-
-            return;
-        }
-
-        try {
-            $this->worker->stopJob($payload['id']);
-            $this->replyWithJson([], $response);
-        } catch (\InvalidArgumentException $e) {
-            $this->replyWithError(400, $e->getMessage(), $response);
-        }
+        $this->routeDispatcher = \FastRoute\simpleDispatcher(
+            function(\FastRoute\RouteCollector $routes) {
+                $routes->addRoute('GET', 'list', ListJobsEndpoint::class);
+                $routes->addRoute('POST', 'schedule', ScheduleJobEndpoint::class);
+                $routes->addRoute('POST', 'cancel', CancelJobEndpoint::class);
+            }
+        );
     }
 }

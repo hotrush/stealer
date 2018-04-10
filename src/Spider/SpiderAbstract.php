@@ -2,9 +2,9 @@
 
 namespace Hotrush\Stealer\Spider;
 
+use Psr\Log\LoggerInterface;
 use Hotrush\Stealer\AbstractClient;
 use Hotrush\Stealer\AdaptersRegistry;
-use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -38,7 +38,7 @@ abstract class SpiderAbstract
     protected $statistic;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -59,7 +59,10 @@ abstract class SpiderAbstract
         }
     }
 
-    public function setLogger(Logger $logger)
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }

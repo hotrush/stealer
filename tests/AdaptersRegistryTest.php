@@ -2,7 +2,9 @@
 
 namespace Hotrush\Stealer\Tests;
 
-class AdaptersRegistryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class AdaptersRegistryTest extends TestCase
 {
     public function testAdapterMethods()
     {

@@ -3,8 +3,9 @@
 namespace Hotrush\Stealer\Tests;
 
 use Hotrush\Stealer\Config;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
     public function testConfigLoad()
     {

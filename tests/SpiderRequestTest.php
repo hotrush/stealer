@@ -2,7 +2,9 @@
 
 namespace Hotrush\Stealer\Tests;
 
-class SpiderRequestTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class SpiderRequestTest extends TestCase
 {
     public function testSpiderRequestCreating()
     {
