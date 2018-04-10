@@ -2,14 +2,14 @@
 
 namespace Hotrush\Stealer;
 
-use React\Http\Response;
 use FastRoute\Dispatcher;
-use Psr\Log\LoggerInterface;
+use Hotrush\Stealer\ApiEndpoints\CancelJobEndpoint;
+use Hotrush\Stealer\ApiEndpoints\ListJobsEndpoint;
+use Hotrush\Stealer\ApiEndpoints\ScheduleJobEndpoint;
 use Hotrush\Stealer\Spider\Registry;
 use Psr\Http\Message\ServerRequestInterface;
-use Hotrush\Stealer\ApiEndpoints\ListJobsEndpoint;
-use Hotrush\Stealer\ApiEndpoints\CancelJobEndpoint;
-use Hotrush\Stealer\ApiEndpoints\ScheduleJobEndpoint;
+use Psr\Log\LoggerInterface;
+use React\Http\Response;
 
 class Api
 {
@@ -36,9 +36,9 @@ class Api
     /**
      * Api constructor.
      *
-     * @param Registry          $registry
-     * @param Worker            $worker
-     * @param LoggerInterface   $logger
+     * @param Registry        $registry
+     * @param Worker          $worker
+     * @param LoggerInterface $logger
      */
     public function __construct(Registry $registry, Worker $worker, LoggerInterface $logger)
     {
@@ -50,6 +50,7 @@ class Api
 
     /**
      * @param ServerRequestInterface $request
+     *
      * @return Response
      */
     public function dispatchRequest(ServerRequestInterface $request)
@@ -66,7 +67,7 @@ class Api
                 $response = new Response(
                     404,
                     [
-                        'Content-Type' => 'application/json'
+                        'Content-Type' => 'application/json',
                     ],
                     json_encode([
                         'message' => 'Not found.',
@@ -77,7 +78,7 @@ class Api
                 $response = new Response(
                     405,
                     [
-                        'Content-Type' => 'application/json'
+                        'Content-Type' => 'application/json',
                     ],
                     json_encode([
                         'message' => 'Method not allowed.',
@@ -88,7 +89,7 @@ class Api
                 $response = new Response(
                     500,
                     [
-                        'Content-Type' => 'application/json'
+                        'Content-Type' => 'application/json',
                     ],
                     json_encode([
                         'message' => 'Internal server error.',
@@ -109,12 +110,12 @@ class Api
     }
 
     /**
-     * Define routes dispatcher
+     * Define routes dispatcher.
      */
     private function loadRouteDispatcher()
     {
         $this->routeDispatcher = \FastRoute\simpleDispatcher(
-            function(\FastRoute\RouteCollector $routes) {
+            function (\FastRoute\RouteCollector $routes) {
                 $routes->addRoute('GET', 'list', ListJobsEndpoint::class);
                 $routes->addRoute('POST', 'schedule', ScheduleJobEndpoint::class);
                 $routes->addRoute('POST', 'cancel', CancelJobEndpoint::class);

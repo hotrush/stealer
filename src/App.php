@@ -2,9 +2,9 @@
 
 namespace Hotrush\Stealer;
 
+use Hotrush\Stealer\Spider\Registry;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
-use Hotrush\Stealer\Spider\Registry;
 
 class App
 {
@@ -41,11 +41,11 @@ class App
     /**
      * App constructor.
      *
-     * @param LoopInterface     $loop
-     * @param AbstractClient    $client
-     * @param AdaptersRegistry  $adaptersRegistry
-     * @param Registry          $registry
-     * @param LoggerInterface   $logger
+     * @param LoopInterface    $loop
+     * @param AbstractClient   $client
+     * @param AdaptersRegistry $adaptersRegistry
+     * @param Registry         $registry
+     * @param LoggerInterface  $logger
      */
     public function __construct(LoopInterface $loop, AbstractClient $client, AdaptersRegistry $adaptersRegistry, Registry $registry, LoggerInterface $logger)
     {

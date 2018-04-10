@@ -22,6 +22,7 @@ class CancelJobEndpoint extends BaseEndpoint
 
         try {
             $this->worker->stopJob($payload['id']);
+
             return new Response(
                 200,
                 [

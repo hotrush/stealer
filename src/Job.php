@@ -2,8 +2,8 @@
 
 namespace Hotrush\Stealer;
 
-use Monolog\Handler\StreamHandler;
 use Hotrush\Stealer\Spider\SpiderAbstract;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 

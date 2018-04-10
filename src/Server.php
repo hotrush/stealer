@@ -3,10 +3,10 @@
 namespace Hotrush\Stealer;
 
 use Hotrush\Stealer\Spider\Registry;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
 use React\Http\Server as HttpServer;
-use Psr\Http\Message\ServerRequestInterface;
 
 class Server
 {
@@ -33,10 +33,10 @@ class Server
     /**
      * Server constructor.
      *
-     * @param LoopInterface     $loop
-     * @param Registry          $registry
-     * @param Worker            $worker
-     * @param LoggerInterface   $logger
+     * @param LoopInterface   $loop
+     * @param Registry        $registry
+     * @param Worker          $worker
+     * @param LoggerInterface $logger
      */
     public function __construct(LoopInterface $loop, Registry $registry, Worker $worker, LoggerInterface $logger)
     {

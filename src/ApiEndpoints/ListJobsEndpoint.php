@@ -23,7 +23,7 @@ class ListJobsEndpoint extends BaseEndpoint
                 'Content-Type' => 'application/json',
             ],
             json_encode([
-                'active_jobs' => $activeJobs
+                'active_jobs' => $activeJobs,
             ])
         );
     }

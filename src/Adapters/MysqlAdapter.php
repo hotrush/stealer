@@ -2,9 +2,9 @@
 
 namespace Hotrush\Stealer\Adapters;
 
-use React\MySQL\Connection;
-use React\EventLoop\LoopInterface;
 use Hotrush\Stealer\AdapterInterface;
+use React\EventLoop\LoopInterface;
+use React\MySQL\Connection;
 
 class MysqlAdapter implements AdapterInterface
 {

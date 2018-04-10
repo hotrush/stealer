@@ -2,10 +2,10 @@
 
 namespace Hotrush\Stealer\Spider;
 
-use Psr\Log\LoggerInterface;
 use Hotrush\Stealer\AbstractClient;
 use Hotrush\Stealer\AdaptersRegistry;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class SpiderAbstract

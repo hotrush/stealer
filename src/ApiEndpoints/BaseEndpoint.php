@@ -2,8 +2,8 @@
 
 namespace Hotrush\Stealer\ApiEndpoints;
 
-use Hotrush\Stealer\Worker;
 use Hotrush\Stealer\Spider\Registry;
+use Hotrush\Stealer\Worker;
 
 class BaseEndpoint
 {
@@ -20,8 +20,8 @@ class BaseEndpoint
     /**
      * BaseEndpoint constructor.
      *
-     * @param Registry  $registry
-     * @param Worker    $worker
+     * @param Registry $registry
+     * @param Worker   $worker
      */
     public function __construct(Registry $registry, Worker $worker)
     {

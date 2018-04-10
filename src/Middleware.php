@@ -3,8 +3,8 @@
 namespace Hotrush\Stealer;
 
 use Hotrush\Stealer\Middleware\ProxyMiddleware;
-use Hotrush\Stealer\Middleware\UserAgentMiddleware;
 use Hotrush\Stealer\Middleware\RandomUserAgentMiddleware;
+use Hotrush\Stealer\Middleware\UserAgentMiddleware;
 
 class Middleware
 {

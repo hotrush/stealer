@@ -2,9 +2,9 @@
 
 namespace Hotrush\Stealer;
 
+use Hotrush\Stealer\Spider\Registry;
 use josegonzalez\Dotenv\Loader;
 use React\EventLoop\LoopInterface;
-use Hotrush\Stealer\Spider\Registry;
 
 class Config
 {
