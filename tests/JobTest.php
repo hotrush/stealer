@@ -12,7 +12,7 @@ class JobTest extends TestCase
         $logger = $this->getMockBuilder(\Monolog\Logger::class)->setConstructorArgs(['test'])->getMock();
         $clientAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\AbstractClient::class, [$loop, $logger]);
         $adaptersRegistry = $this->getMockBuilder(\Hotrush\Stealer\AdaptersRegistry::class)->getMock();
-        $spiderAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, [$clientAbstract, $adaptersRegistry]);
+        $spiderAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, ['test', $clientAbstract, $adaptersRegistry]);
 
         $this->assertTrue($spiderAbstract instanceof \Hotrush\Stealer\Spider\SpiderAbstract);
 

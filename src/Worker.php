@@ -71,13 +71,14 @@ class Worker
     }
 
     /**
-     * @param $spiderName
+     * @param string $spiderName
+     * @param string $spiderClass
      *
      * @return string
      */
-    public function runSpiderJob($spiderName)
+    public function runSpiderJob($spiderName, $spiderClass)
     {
-        $spider = new $spiderName($this->client, $this->adaptersRegistry);
+        $spider = new $spiderClass($spiderName, $this->client, $this->adaptersRegistry);
         $job = new Job($spider);
         $jobId = $job->getId();
         $job->initLogger();

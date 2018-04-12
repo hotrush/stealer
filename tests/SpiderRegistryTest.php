@@ -11,23 +11,17 @@ class SpiderRegistryTest extends TestCase
      */
     private $registry;
 
-    private $spiderAbstract;
+    private $spiderAbstractClass = \Hotrush\Stealer\Spider\SpiderAbstract::class;
 
     private $spidersArray = [];
 
     public function setUp()
     {
-        $loop = \React\EventLoop\Factory::create();
-        $logger = $this->getMockBuilder(\Monolog\Logger::class)->setConstructorArgs(['test'])->getMock();
-        $clientAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\AbstractClient::class, [$loop, $logger]);
-        $adaptersRegistry = $this->getMockBuilder(\Hotrush\Stealer\AdaptersRegistry::class)->getMock();
-        $this->spiderAbstract = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, [$clientAbstract, $adaptersRegistry]);
-
         $this->registry = new \Hotrush\Stealer\Spider\Registry();
-        $this->registry->registerSpider('test', $this->spiderAbstract);
+        $this->registry->registerSpider('test', $this->spiderAbstractClass);
 
         $this->spidersArray = [
-            'test' => $this->spiderAbstract,
+            'test' => \Hotrush\Stealer\Spider\SpiderAbstract::class,
         ];
     }
 
@@ -35,7 +29,7 @@ class SpiderRegistryTest extends TestCase
     {
         $this->assertAttributeEquals($this->spidersArray, 'spiders', $this->registry);
         $this->assertEquals($this->spidersArray, $this->registry->getSpiders());
-        $this->assertEquals($this->spiderAbstract, $this->registry->getSpider('test'));
+        $this->assertEquals($this->spiderAbstractClass, $this->registry->getSpider('test'));
         $this->assertTrue($this->registry->spiderExists('test'));
     }
 
@@ -50,13 +44,13 @@ class SpiderRegistryTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Spider\'s name already exists.');
-        $this->registry->registerSpider('test', $this->spiderAbstract);
+        $this->registry->registerSpider('test', $this->spiderAbstractClass);
     }
 
     public function testRegisterExistException2()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Spider\'s class already exists.');
-        $this->registry->registerSpider('test2', $this->spiderAbstract);
+        $this->registry->registerSpider('test2', $this->spiderAbstractClass);
     }
 }
