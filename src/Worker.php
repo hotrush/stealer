@@ -212,9 +212,8 @@ class Worker
         $this->logJobStats($job);
         $this->finishedJobs[] = $job;
         unset($this->activeJobs[$id]);
-        $this->activeJobs = array_values($this->activeJobs);
         if (!$this->activeJobs) {
-            $this->client->end();
+            $this->client->stop();
         }
     }
 }
