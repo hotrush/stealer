@@ -80,7 +80,7 @@ class Job
         );
         $this->logger = new Logger('job-'.$this->id);
         $this->logger->pushHandler(
-            new StreamHandler(getenv('LOG_DIR').$logFileName)
+            new StreamHandler(Config::getenv('LOG_DIR').$logFileName)
         );
         $this->spider->setLogger($this->logger);
     }

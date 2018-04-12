@@ -54,7 +54,7 @@ class Server
             return $api->dispatchRequest($request);
         });
 
-        $socket = new \React\Socket\Server(getenv('SERVER_PORT'), $this->loop);
+        $socket = new \React\Socket\Server(Config::getenv('SERVER_PORT'), $this->loop);
         $server->listen($socket);
     }
 }
