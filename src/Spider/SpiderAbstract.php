@@ -11,6 +11,11 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class SpiderAbstract
 {
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @var AbstractClient
      */
     private $client;
@@ -45,11 +50,13 @@ abstract class SpiderAbstract
     /**
      * SpiderAbstract constructor.
      *
+     * @param string           $name
      * @param AbstractClient   $client
      * @param AdaptersRegistry $adaptersRegistry
      */
-    public function __construct(AbstractClient $client, AdaptersRegistry $adaptersRegistry)
+    public function __construct($name, AbstractClient $client, AdaptersRegistry $adaptersRegistry)
     {
+        $this->name = $name;
         $this->client = $client;
         $this->adaptersRegistry = $adaptersRegistry;
         $this->statistic = new Statistic();
@@ -57,6 +64,14 @@ abstract class SpiderAbstract
         if ($startRequest) {
             $this->requests[] = $startRequest;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**

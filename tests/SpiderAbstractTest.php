@@ -12,8 +12,9 @@ class SpiderAbstractTest extends TestCase
         $logger = $this->getMockBuilder(\Monolog\Logger::class)->setConstructorArgs(['test'])->getMock();
         $client = new \Hotrush\Stealer\Client\Guzzle($loop, $logger);
         $adaptersRegistry = $this->getMockBuilder(\Hotrush\Stealer\AdaptersRegistry::class)->getMock();
-        $spider = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, [$client, $adaptersRegistry]);
+        $spider = $this->getMockForAbstractClass(\Hotrush\Stealer\Spider\SpiderAbstract::class, ['test', $client, $adaptersRegistry]);
         $this->assertAttributeEquals($client, 'client', $spider);
+        $this->assertAttributeEquals('test', 'name', $spider);
         $this->assertAttributeEquals($adaptersRegistry, 'adaptersRegistry', $spider);
         $this->assertAttributeEquals(4, 'perTick', $spider);
         $this->assertAttributeEquals([], 'requests', $spider);
@@ -22,6 +23,7 @@ class SpiderAbstractTest extends TestCase
         $spider->setLogger($logger);
         $this->assertAttributeEquals($logger, 'logger', $spider);
         $this->assertEquals($client, $spider->getClient());
+        $this->assertEquals('test', $spider->getName());
         $this->assertInstanceOf(\Hotrush\Stealer\Spider\Statistic::class, $spider->getStatistic());
         $this->assertFalse($spider->isActive());
         $response = $this->getMockBuilder(\Psr\Http\Message\ResponseInterface::class)->getMock();

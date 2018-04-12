@@ -58,6 +58,8 @@ class Job
     }
 
     /**
+     * @param bool $iso
+     *
      * @return bool|string
      */
     public function getStartTime($iso = true)
@@ -70,10 +72,15 @@ class Job
      */
     public function initLogger()
     {
-        // @todo change log file name
+        $logFileName = sprintf(
+            '%s-%s-%s.log',
+            $this->spider->getName(),
+            (new \DateTime())->format('Y-m-d'),
+            $this->id
+        );
         $this->logger = new Logger('job-'.$this->id);
         $this->logger->pushHandler(
-            new StreamHandler(getenv('LOG_DIR').$this->id.'.log')
+            new StreamHandler(getenv('LOG_DIR').$logFileName)
         );
         $this->spider->setLogger($this->logger);
     }

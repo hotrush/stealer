@@ -21,7 +21,7 @@ class ScheduleJobEndpoint extends BaseEndpoint
         }
 
         $spider = $this->registry->getSpider($payload['spider']);
-        $jobId = $this->worker->runSpiderJob($spider);
+        $jobId = $this->worker->runSpiderJob($payload['spider'], $spider);
 
         return new Response(
             200,
