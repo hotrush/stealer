@@ -64,10 +64,11 @@ class Config
     }
 
     /**
-     * Get parsed env value
+     * Get parsed env value.
      *
      * @param $key
      * @param null $default
+     *
      * @return mixed
      */
     public static function getenv($key, $default = null)
@@ -93,7 +94,7 @@ class Config
                 return;
         }
 
-        if (strlen($value) > 1 && $value[0] === '"' && $value[strlen($value)-1] == '"') {
+        if (strlen($value) > 1 && $value[0] === '"' && $value[strlen($value) - 1] == '"') {
             return substr($value, 1, -1);
         }
 
