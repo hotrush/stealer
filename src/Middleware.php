@@ -11,9 +11,9 @@ class Middleware
     /**
      * @param $address
      *
-     * @return \Closure
+     * @return callable
      */
-    public static function proxy($address)
+    public static function proxy(string $address): callable
     {
         return function (callable $handler) use ($address) {
             return new ProxyMiddleware($handler, $address);
@@ -21,16 +21,19 @@ class Middleware
     }
 
     /**
-     * @return \Closure
+     * @return callable
      */
-    public static function userAgent()
+    public static function userAgent(): callable
     {
         return function (callable $handler) {
             return new UserAgentMiddleware($handler);
         };
     }
 
-    public static function randomUserAgent()
+    /**
+     * @return callable
+     */
+    public static function randomUserAgent(): callable
     {
         return function (callable $handler) {
             return new RandomUserAgentMiddleware($handler);

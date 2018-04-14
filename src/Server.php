@@ -46,7 +46,7 @@ class Server
         $this->logger = $logger;
     }
 
-    public function start()
+    public function start(): void
     {
         $api = new Api($this->registry, $this->worker, $this->logger);
 

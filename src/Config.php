@@ -11,7 +11,7 @@ class Config
     /**
      * @param string $configPath
      */
-    public static function load($configPath)
+    public static function load(string $configPath): void
     {
         (new Loader($configPath))
             ->parse()
@@ -21,7 +21,7 @@ class Config
     /**
      * @param string $logDir
      */
-    public static function setLogsDir($logDir)
+    public static function setLogsDir(string $logDir): void
     {
         putenv('LOG_DIR='.$logDir);
     }
@@ -32,17 +32,17 @@ class Config
      *
      * @return AdaptersRegistry
      */
-    public static function loadAdapters($filePath, LoopInterface $loop)
+    public static function loadAdapters(string $filePath, LoopInterface $loop): AdaptersRegistry
     {
         $adapters = include $filePath;
-        $pipeline = new AdaptersRegistry();
+        $adaptersRegistry = new AdaptersRegistry();
         if ($adapters) {
             foreach ($adapters as $name => $adapter) {
-                $pipeline->addAdapter($name, new $adapter($loop));
+                $adaptersRegistry->addAdapter($name, new $adapter($loop));
             }
         }
 
-        return $pipeline;
+        return $adaptersRegistry;
     }
 
     /**
@@ -50,7 +50,7 @@ class Config
      *
      * @return Registry
      */
-    public static function loadRegistry($filePath)
+    public static function loadRegistry(string $filePath): Registry
     {
         $spiders = include $filePath;
         $registry = new Registry();
@@ -71,7 +71,7 @@ class Config
      *
      * @return mixed
      */
-    public static function getenv($key, $default = null)
+    public static function getenv(string $key, $default = null)
     {
         $value = getenv($key);
 
@@ -91,7 +91,7 @@ class Config
                 return '';
             case 'null':
             case '(null)':
-                return;
+                return null;
         }
 
         if (strlen($value) > 1 && $value[0] === '"' && $value[strlen($value) - 1] == '"') {

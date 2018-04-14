@@ -58,7 +58,7 @@ class Request
     /**
      * @param AbstractClient $client
      */
-    public function send(AbstractClient $client)
+    public function send(AbstractClient $client): void
     {
         $client->getClient()->requestAsync($this->method, $this->uri, $this->options)
             ->then($this->callback)

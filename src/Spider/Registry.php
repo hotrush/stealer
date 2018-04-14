@@ -15,7 +15,7 @@ class Registry
      * @param $name
      * @param $classname
      */
-    public function registerSpider($name, $classname)
+    public function registerSpider(string $name, string $classname): void
     {
         if (isset($this->spiders[$name])) {
             throw new \InvalidArgumentException('Spider\'s name already exists.');
@@ -32,7 +32,7 @@ class Registry
      *
      * @return array
      */
-    public function getSpiders()
+    public function getSpiders(): array
     {
         return $this->spiders;
     }
@@ -42,9 +42,9 @@ class Registry
      *
      * @param $name
      *
-     * @return mixed
+     * @return string
      */
-    public function getSpider($name)
+    public function getSpider(string $name): string
     {
         if (!isset($this->spiders[$name])) {
             throw new \InvalidArgumentException('No spider with name '.$name.' was found');
@@ -53,7 +53,12 @@ class Registry
         return $this->spiders[$name];
     }
 
-    public function spiderExists($name)
+    /**
+     * @param $name
+     *
+     * @return bool
+     */
+    public function spiderExists($name): bool
     {
         return isset($this->spiders[$name]);
     }

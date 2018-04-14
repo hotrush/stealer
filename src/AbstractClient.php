@@ -2,6 +2,7 @@
 
 namespace Hotrush\Stealer;
 
+use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
 
@@ -40,7 +41,7 @@ abstract class AbstractClient
     /**
      * @return \GuzzleHttp\Client
      */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
     }
@@ -48,7 +49,7 @@ abstract class AbstractClient
     /**
      * @return bool
      */
-    public function isReady()
+    public function isReady(): bool
     {
         return true;
     }
@@ -56,7 +57,7 @@ abstract class AbstractClient
     /**
      * @return bool
      */
-    public function isStopped()
+    public function isStopped(): bool
     {
         return true;
     }
@@ -64,14 +65,14 @@ abstract class AbstractClient
     /**
      * Start the client.
      */
-    public function start()
+    public function start(): void
     {
     }
 
     /**
      * Stops the client.
      */
-    public function stop()
+    public function stop(): void
     {
     }
 }

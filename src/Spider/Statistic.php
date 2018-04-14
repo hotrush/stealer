@@ -42,7 +42,7 @@ class Statistic
     /**
      * @param int $num
      */
-    public function incrementTotalRequests($num = 1)
+    public function incrementTotalRequests($num = 1): void
     {
         $this->totalRequests += (int) $num;
     }
@@ -50,7 +50,7 @@ class Statistic
     /**
      * @return int
      */
-    public function getTotalRequests()
+    public function getTotalRequests(): int
     {
         return $this->totalRequests;
     }
@@ -58,7 +58,7 @@ class Statistic
     /**
      * @param int $num
      */
-    public function incrementActiveRequests($num = 1)
+    public function incrementActiveRequests($num = 1): void
     {
         $this->activeRequests += (int) $num;
     }
@@ -66,7 +66,7 @@ class Statistic
     /**
      * @param int $num
      */
-    public function decrementActiveRequests($num = 1)
+    public function decrementActiveRequests($num = 1): void
     {
         if ($this->activeRequests > 0) {
             $this->activeRequests -= (int) $num;
@@ -76,7 +76,7 @@ class Statistic
     /**
      * @return int
      */
-    public function getActiveRequests()
+    public function getActiveRequests(): int
     {
         return $this->activeRequests;
     }
@@ -84,7 +84,7 @@ class Statistic
     /**
      * @param int $num
      */
-    public function incrementSuccessRequests($num = 1)
+    public function incrementSuccessRequests($num = 1): void
     {
         $this->successRequests += (int) $num;
     }
@@ -92,7 +92,7 @@ class Statistic
     /**
      * @return int
      */
-    public function getSuccessRequests()
+    public function getSuccessRequests(): int
     {
         return $this->successRequests;
     }
@@ -100,7 +100,7 @@ class Statistic
     /**
      * @param int $num
      */
-    public function incrementFailedRequests($num = 1)
+    public function incrementFailedRequests($num = 1): void
     {
         $this->failedRequests += (int) $num;
     }
@@ -108,7 +108,7 @@ class Statistic
     /**
      * @return int
      */
-    public function getFailedRequests()
+    public function getFailedRequests(): int
     {
         return $this->failedRequests;
     }
@@ -116,7 +116,7 @@ class Statistic
     /**
      * @return float
      */
-    public function getRequestsPerSecond()
+    public function getRequestsPerSecond(): float
     {
         return time() > $this->startTime ? round(($this->successRequests + $this->failedRequests) / (time() - $this->startTime), 2) : 0;
     }

@@ -76,7 +76,7 @@ class Worker
      *
      * @return string
      */
-    public function runSpiderJob($spiderName, $spiderClass)
+    public function runSpiderJob(string $spiderName, string $spiderClass): string
     {
         $spider = new $spiderClass($spiderName, $this->client, $this->adaptersRegistry);
         $job = new Job($spider);
@@ -91,7 +91,7 @@ class Worker
     /**
      * Stop the worker. Finish jobs.
      */
-    public function stop()
+    public function stop(): void
     {
         $this->stopping = true;
         $this->logger->info('Stopping all jobs');
@@ -108,7 +108,7 @@ class Worker
     /**
      * Start react periodic timer.
      */
-    private function startPeriodicTimer()
+    private function startPeriodicTimer(): void
     {
         $this->loop->addPeriodicTimer(1, function () {
             if ($this->stopping || $this->stopped) {
@@ -138,7 +138,7 @@ class Worker
     /**
      * Start timer for logging stats for running jobs.
      */
-    private function startStatsPeriodicTimer()
+    private function startStatsPeriodicTimer(): void
     {
         $this->loop->addPeriodicTimer($this->statsLoggingInterval, function () {
             foreach ($this->activeJobs as $job) {
@@ -153,7 +153,7 @@ class Worker
     /**
      * @return Job[]
      */
-    public function getActiveJobs()
+    public function getActiveJobs(): array
     {
         return $this->activeJobs;
     }
@@ -161,7 +161,7 @@ class Worker
     /**
      * @return Job[]
      */
-    public function getFinishedJobs()
+    public function getFinishedJobs(): array
     {
         return $this->finishedJobs;
     }
@@ -169,7 +169,7 @@ class Worker
     /**
      * @return bool
      */
-    public function isStopped()
+    public function isStopped(): bool
     {
         return $this->stopped;
     }
@@ -177,7 +177,7 @@ class Worker
     /**
      * @param Job $job
      */
-    private function logJobStats(Job $job)
+    private function logJobStats(Job $job): void
     {
         $this->logger->info(sprintf('Work time: %d seconds', time() - $job->getStartTime(false)));
         $this->logger->info(sprintf('Total requests: %d', $job->getSpider()->getStatistic()->getTotalRequests()));
@@ -192,7 +192,7 @@ class Worker
      *
      * @return bool
      */
-    public function hasActiveJob($id)
+    public function hasActiveJob($id): bool
     {
         return isset($this->activeJobs[$id]);
     }
@@ -202,7 +202,7 @@ class Worker
      *
      * @param $id
      */
-    public function stopJob($id)
+    public function stopJob($id): void
     {
         if (!$this->hasActiveJob($id)) {
             throw new \InvalidArgumentException(sprintf('No job with id %s was found', $id));

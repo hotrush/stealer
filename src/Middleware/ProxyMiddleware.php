@@ -10,7 +10,7 @@ class ProxyMiddleware
 
     private $address;
 
-    public function __construct(callable $nextHandler, $address)
+    public function __construct(callable $nextHandler, string $address)
     {
         $this->nextHandler = $nextHandler;
         $this->address = $address;

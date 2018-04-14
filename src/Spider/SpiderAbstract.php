@@ -54,7 +54,7 @@ abstract class SpiderAbstract
      * @param AbstractClient   $client
      * @param AdaptersRegistry $adaptersRegistry
      */
-    public function __construct($name, AbstractClient $client, AdaptersRegistry $adaptersRegistry)
+    public function __construct(string $name, AbstractClient $client, AdaptersRegistry $adaptersRegistry)
     {
         $this->name = $name;
         $this->client = $client;
@@ -77,7 +77,7 @@ abstract class SpiderAbstract
     /**
      * @param LoggerInterface $logger
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
@@ -85,7 +85,7 @@ abstract class SpiderAbstract
     /**
      * @return AbstractClient
      */
-    public function getClient()
+    public function getClient(): AbstractClient
     {
         return $this->client;
     }
@@ -93,7 +93,7 @@ abstract class SpiderAbstract
     /**
      * @return Statistic
      */
-    public function getStatistic()
+    public function getStatistic(): Statistic
     {
         return $this->statistic;
     }
@@ -101,7 +101,7 @@ abstract class SpiderAbstract
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return count($this->requests) || $this->statistic->getActiveRequests();
     }
@@ -111,12 +111,12 @@ abstract class SpiderAbstract
      *
      * @return Request
      */
-    abstract public function getStartRequest();
+    abstract public function getStartRequest(): Request;
 
     /**
      * Send requests for this tick.
      */
-    public function executeTickRequests()
+    public function executeTickRequests(): void
     {
         for ($i = 1; $i <= $this->perTick; $i++) {
             $request = array_shift($this->requests);
@@ -132,7 +132,7 @@ abstract class SpiderAbstract
     /**
      * @param $reason
      */
-    public function errorCallback($reason)
+    public function errorCallback($reason): void
     {
         $this->statistic->decrementActiveRequests();
         $this->statistic->incrementFailedRequests();
@@ -144,7 +144,7 @@ abstract class SpiderAbstract
      *
      * @return Crawler
      */
-    protected function createCrawlerFromResponse(ResponseInterface $response)
+    protected function createCrawlerFromResponse(ResponseInterface $response): Crawler
     {
         $crawler = new Crawler();
         $crawler->addHtmlContent((string) $response->getBody()->getContents());

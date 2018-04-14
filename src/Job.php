@@ -44,7 +44,7 @@ class Job
     /**
      * @return string
      */
-    private function generateId()
+    private function generateId(): string
     {
         return sha1(microtime());
     }
@@ -52,7 +52,7 @@ class Job
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -70,7 +70,7 @@ class Job
     /**
      * Init logger for job and spider.
      */
-    public function initLogger()
+    public function initLogger(): void
     {
         $logFileName = sprintf(
             '%s-%s-%s.log',
@@ -88,7 +88,7 @@ class Job
     /**
      * @return SpiderAbstract
      */
-    public function getSpider()
+    public function getSpider(): SpiderAbstract
     {
         return $this->spider;
     }
@@ -96,7 +96,7 @@ class Job
     /**
      * Execute tick jobs.
      */
-    public function executeTickJob()
+    public function executeTickJob(): void
     {
         $this->getSpider()->executeTickRequests();
     }

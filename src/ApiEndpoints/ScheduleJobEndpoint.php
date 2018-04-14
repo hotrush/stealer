@@ -6,7 +6,7 @@ use React\Http\Response;
 
 class ScheduleJobEndpoint extends BaseEndpoint
 {
-    public function __invoke(array $payload)
+    public function __invoke(array $payload): Response
     {
         if (!isset($payload['spider']) || !$this->registry->spiderExists($payload['spider'])) {
             return new Response(

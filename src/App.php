@@ -62,7 +62,7 @@ class App
     /**
      * Start all the magic!
      */
-    public function run()
+    public function run(): void
     {
         $this->server->start();
         $this->loop->run();
@@ -72,7 +72,7 @@ class App
      * Register handlers for killing signals.
      * Close worker and client on exit.
      */
-    private function registerKillSignal()
+    private function registerKillSignal(): void
     {
         $onceReceived = false;
         $handler = function () use (&$onceReceived) {

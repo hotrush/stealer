@@ -6,7 +6,7 @@ use React\Http\Response;
 
 class CancelJobEndpoint extends BaseEndpoint
 {
-    public function __invoke(array $payload)
+    public function __invoke(array $payload): Response
     {
         if (!isset($payload['id'])) {
             return new Response(

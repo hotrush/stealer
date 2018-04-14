@@ -53,7 +53,7 @@ class Api
      *
      * @return Response
      */
-    public function dispatchRequest(ServerRequestInterface $request)
+    public function dispatchRequest(ServerRequestInterface $request): Response
     {
         $routeInfo = $this->routeDispatcher->dispatch($request->getMethod(), $request->getUri()->getPath());
 
@@ -112,7 +112,7 @@ class Api
     /**
      * Define routes dispatcher.
      */
-    private function loadRouteDispatcher()
+    private function loadRouteDispatcher(): void
     {
         $this->routeDispatcher = \FastRoute\simpleDispatcher(
             function (\FastRoute\RouteCollector $routes) {

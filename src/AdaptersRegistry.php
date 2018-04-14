@@ -14,7 +14,7 @@ class AdaptersRegistry
      *
      * @return mixed
      */
-    public function getAdapter($adapterName)
+    public function getAdapter(string $adapterName)
     {
         if (!isset($this->adapters[$adapterName])) {
             throw new \InvalidArgumentException('Adapter name not exists.');
@@ -27,7 +27,7 @@ class AdaptersRegistry
      * @param string           $adapterName
      * @param AdapterInterface $instance
      */
-    public function addAdapter($adapterName, AdapterInterface $instance)
+    public function addAdapter(string $adapterName, AdapterInterface $instance): void
     {
         if (isset($this->adapters[$adapterName])) {
             throw new \InvalidArgumentException('Adapter name already exists.');
