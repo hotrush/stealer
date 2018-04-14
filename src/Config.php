@@ -91,7 +91,7 @@ class Config
                 return '';
             case 'null':
             case '(null)':
-                return null;
+                return;
         }
 
         if (strlen($value) > 1 && $value[0] === '"' && $value[strlen($value) - 1] == '"') {
