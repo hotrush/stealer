@@ -16,7 +16,7 @@ class BeanstalkAdapter implements AdapterInterface
     /**
      * BeanstalkAdapter constructor.
      *
-     * @todo not async...
+     * It's not async...
      */
     public function __construct()
     {
