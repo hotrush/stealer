@@ -54,7 +54,11 @@ class Server
             return $api->dispatchRequest($request);
         });
 
+        $this->logger->info('Starting server...');
+
         $socket = new \React\Socket\Server(Config::getenv('SERVER_PORT'), $this->loop);
         $server->listen($socket);
+
+        $this->logger->info(sprintf('Server started at %s port', Config::getenv('SERVER_PORT')));
     }
 }

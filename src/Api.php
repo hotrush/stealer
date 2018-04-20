@@ -61,7 +61,20 @@ class Api
 
         switch ($routeInfo[0]) {
             case Dispatcher::FOUND:
-                $response = call_user_func(new $routeInfo[1]($this->registry, $this->worker), $routeInfo[2]);
+                try {
+                    $requestBody = $this->parseRequestBody($request);
+                } catch (\InvalidArgumentException $e) {
+                    return new Response(
+                        500,
+                        [
+                            'Content-Type' => 'application/json',
+                        ],
+                        json_encode([
+                            'message' => $e->getMessage(),
+                        ])
+                    );
+                }
+                $response = call_user_func(new $routeInfo[1]($this->registry, $this->worker), $requestBody);
                 break;
             case Dispatcher::NOT_FOUND:
                 $response = new Response(
@@ -116,10 +129,25 @@ class Api
     {
         $this->routeDispatcher = \FastRoute\simpleDispatcher(
             function (\FastRoute\RouteCollector $routes) {
-                $routes->addRoute('GET', 'list', ListJobsEndpoint::class);
-                $routes->addRoute('POST', 'schedule', ScheduleJobEndpoint::class);
-                $routes->addRoute('POST', 'cancel', CancelJobEndpoint::class);
+                $routes->addRoute('GET', '/list', ListJobsEndpoint::class);
+                $routes->addRoute('POST', '/schedule', ScheduleJobEndpoint::class);
+                $routes->addRoute('POST', '/cancel', CancelJobEndpoint::class);
             }
         );
+    }
+
+    /**
+     * Parse request payload.
+     *
+     * @param ServerRequestInterface $request
+     * @return bool|mixed|string
+     */
+    private function parseRequestBody(ServerRequestInterface $request)
+    {
+        if (!$request->getBody()->getSize()) {
+            return array();
+        }
+
+        return \GuzzleHttp\json_decode($request->getBody()->getContents(), true);
     }
 }

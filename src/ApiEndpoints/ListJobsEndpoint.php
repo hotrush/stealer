@@ -6,7 +6,7 @@ use React\Http\Response;
 
 class ListJobsEndpoint extends BaseEndpoint
 {
-    public function __invoke(): Response
+    public function __invoke(array $payload): Response
     {
         $activeJobs = [];
 
