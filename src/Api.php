@@ -140,7 +140,7 @@ class Api
      * Parse request payload.
      *
      * @param ServerRequestInterface $request
-     * s
+     *
      * @return bool|mixed|string
      */
     private function parseRequestBody(ServerRequestInterface $request)
