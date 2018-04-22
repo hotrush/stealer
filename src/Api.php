@@ -140,12 +140,13 @@ class Api
      * Parse request payload.
      *
      * @param ServerRequestInterface $request
+     * s
      * @return bool|mixed|string
      */
     private function parseRequestBody(ServerRequestInterface $request)
     {
         if (!$request->getBody()->getSize()) {
-            return array();
+            return [];
         }
 
         return \GuzzleHttp\json_decode($request->getBody()->getContents(), true);
