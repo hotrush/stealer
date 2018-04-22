@@ -128,7 +128,7 @@ class Worker
                     unset($this->activeJobs[$key]);
                     $this->activeJobs = array_values($this->activeJobs);
                     if (!$this->activeJobs) {
-                        $this->client->end();
+                        $this->client->stop();
                     }
                 }
             }
