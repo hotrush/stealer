@@ -4,8 +4,8 @@ namespace Hotrush\Stealer;
 
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
-use function React\Promise\all;
 use React\Promise\PromiseInterface;
+use function React\Promise\all;
 
 class Worker
 {

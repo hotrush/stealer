@@ -168,7 +168,7 @@ abstract class SpiderAbstract
      * Execute some code on spider stop.
      *
      * @param LoopInterface $loop
-     * @param boolean       $finished
+     * @param bool          $finished
      *
      * @return PromiseInterface|void
      */
