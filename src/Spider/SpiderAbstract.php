@@ -6,6 +6,8 @@ use Hotrush\Stealer\AbstractClient;
 use Hotrush\Stealer\AdaptersRegistry;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use React\EventLoop\LoopInterface;
+use React\Promise\PromiseInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class SpiderAbstract
@@ -150,5 +152,28 @@ abstract class SpiderAbstract
         $crawler->addHtmlContent((string) $response->getBody()->getContents());
 
         return $crawler;
+    }
+
+    /**
+     * Execute some code on spider start.
+     *
+     * @param LoopInterface $loop
+     */
+    public function onStart(LoopInterface $loop): void
+    {
+        // ...
+    }
+
+    /**
+     * Execute some code on spider stop.
+     *
+     * @param LoopInterface $loop
+     * @param boolean       $finished
+     *
+     * @return PromiseInterface|void
+     */
+    public function onStop(LoopInterface $loop, bool $finished = true)
+    {
+        // ...
     }
 }

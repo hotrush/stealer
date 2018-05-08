@@ -4,6 +4,8 @@ namespace Hotrush\Stealer;
 
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
+use function React\Promise\all;
+use React\Promise\PromiseInterface;
 
 class Worker
 {
@@ -83,6 +85,7 @@ class Worker
         $jobId = $job->getId();
         $job->initLogger();
         $this->activeJobs[$jobId] = $job;
+        $job->getSpider()->onStart($this->loop);
         $this->logger->info(sprintf('Job started. Spider: %s. ID: %s', $spiderName, $jobId));
 
         return $jobId;
@@ -94,15 +97,29 @@ class Worker
     public function stop(): void
     {
         $this->stopping = true;
+        $stopPromises = [];
         $this->logger->info('Stopping all jobs');
         if ($this->activeJobs) {
             foreach ($this->activeJobs as $job) {
                 $this->logger->info(sprintf('Stopping job. ID: %s', $job->getId()));
+                $stopPromise = $job->getSpider()->onStop($this->loop, false);
+                if ($stopPromise instanceof PromiseInterface) {
+                    $stopPromises[] = $stopPromise;
+                }
                 $this->logJobStats($job);
             }
         }
-        $this->stopped = true;
-        $this->stopping = false;
+
+        if ($stopPromises) {
+            all($stopPromises)
+                ->always(function () {
+                    $this->stopped = true;
+                    $this->stopping = false;
+                });
+        } else {
+            $this->stopped = true;
+            $this->stopping = false;
+        }
     }
 
     /**
@@ -124,6 +141,8 @@ class Worker
                 } else {
                     $this->logger->info(sprintf('Job finished. ID: %s', $job->getId()));
                     $this->logJobStats($job);
+                    // maybe handle promise here
+                    $job->getSpider()->onStop($this->loop, true);
                     $this->finishedJobs[] = $job;
                     unset($this->activeJobs[$key]);
                     $this->activeJobs = array_values($this->activeJobs);
@@ -210,6 +229,7 @@ class Worker
         $job = $this->activeJobs[$id];
         $this->logger->info(sprintf('Stopping the job. ID: %s', $job->getId()));
         $this->logJobStats($job);
+        $job->getSpider()->onStop($this->loop, false);
         $this->finishedJobs[] = $job;
         unset($this->activeJobs[$id]);
         if (!$this->activeJobs) {
