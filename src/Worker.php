@@ -229,6 +229,7 @@ class Worker
      * Stops running job.
      *
      * @todo improve stopping (wait for promise)
+     *
      * @param $id
      */
     public function stopJob($id): void
