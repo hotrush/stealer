@@ -7,6 +7,7 @@ use Hotrush\Stealer\AdaptersRegistry;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
+use React\Promise\FulfilledPromise;
 use React\Promise\PromiseInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -158,10 +159,12 @@ abstract class SpiderAbstract
      * Execute some code on spider start.
      *
      * @param LoopInterface $loop
+     *
+     * @return PromiseInterface
      */
-    public function onStart(LoopInterface $loop): void
+    public function onStart(LoopInterface $loop): PromiseInterface
     {
-        // ...
+        return new FulfilledPromise();
     }
 
     /**
@@ -170,10 +173,10 @@ abstract class SpiderAbstract
      * @param LoopInterface $loop
      * @param bool          $finished
      *
-     * @return PromiseInterface|void
+     * @return PromiseInterface
      */
-    public function onStop(LoopInterface $loop, bool $finished = true)
+    public function onStop(LoopInterface $loop, bool $finished = true): PromiseInterface
     {
-        // ...
+        return new FulfilledPromise();
     }
 }
