@@ -4,7 +4,6 @@ namespace Hotrush\Stealer;
 
 use Psr\Log\LoggerInterface;
 use React\EventLoop\LoopInterface;
-use React\Promise\PromiseInterface;
 use function React\Promise\all;
 
 class Worker
@@ -82,13 +81,26 @@ class Worker
     {
         $spider = new $spiderClass($spiderName, $this->client, $this->adaptersRegistry);
         $job = new Job($spider);
-        $jobId = $job->getId();
         $job->initLogger();
-        $this->activeJobs[$jobId] = $job;
-        $job->getSpider()->onStart($this->loop);
-        $this->logger->info(sprintf('Job started. Spider: %s. ID: %s', $spiderName, $jobId));
+        $job->getSpider()->onStart($this->loop)
+            ->then(
+                function () use ($job, $spiderName) {
+                    $this->activeJobs[$job->getId()] = $job;
+                    $this->logger->info(sprintf(
+                        'Job started. Spider: %s. ID: %s',
+                        $spiderName,
+                        $job->getId()
+                    ));
+                },
+                function () use ($job, $spiderName) {
+                    $this->logger->error(sprintf(
+                        'Error starting job, onStart failed. Spider: %s. ID: %s',
+                        $spiderName,
+                        $job->getId()
+                    ));
+                });
 
-        return $jobId;
+        return $job->getId();
     }
 
     /**
@@ -102,10 +114,7 @@ class Worker
         if ($this->activeJobs) {
             foreach ($this->activeJobs as $job) {
                 $this->logger->info(sprintf('Stopping job. ID: %s', $job->getId()));
-                $stopPromise = $job->getSpider()->onStop($this->loop, false);
-                if ($stopPromise instanceof PromiseInterface) {
-                    $stopPromises[] = $stopPromise;
-                }
+                $stopPromises[] = $job->getSpider()->onStop($this->loop, false);
                 $this->logJobStats($job);
             }
         }
@@ -219,6 +228,7 @@ class Worker
     /**
      * Stops running job.
      *
+     * @todo improve stopping (wait for promise)
      * @param $id
      */
     public function stopJob($id): void
