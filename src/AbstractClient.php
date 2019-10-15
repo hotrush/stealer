@@ -35,7 +35,7 @@ abstract class AbstractClient
      * @param LoggerInterface $logger
      * @param array           $config
      */
-    public function __construct(LoopInterface $loop, LoggerInterface $logger, array $config = array())
+    public function __construct(LoopInterface $loop, LoggerInterface $logger, array $config = [])
     {
         $this->loop = $loop;
         $this->logger = $logger;
