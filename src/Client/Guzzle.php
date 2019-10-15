@@ -20,8 +20,8 @@ class Guzzle extends AbstractClient
         $stack = HandlerStack::create($handler);
         $stack->push(Middleware::userAgent());
 
-        return new GuzzleClient([
-            'handler' => $stack,
-        ]);
+        $config = array_merge($this->config, ['handler' => $stack]);
+
+        return new GuzzleClient($config);
     }
 }
