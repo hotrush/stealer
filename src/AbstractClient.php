@@ -19,6 +19,11 @@ abstract class AbstractClient
     protected $logger;
 
     /**
+     * @var array
+     */
+    protected $config;
+
+    /**
      * @var \GuzzleHttp\Client
      */
     protected $client;
@@ -28,11 +33,13 @@ abstract class AbstractClient
      *
      * @param LoopInterface   $loop
      * @param LoggerInterface $logger
+     * @param array           $config
      */
-    public function __construct(LoopInterface $loop, LoggerInterface $logger)
+    public function __construct(LoopInterface $loop, LoggerInterface $logger, array $config = array())
     {
         $this->loop = $loop;
         $this->logger = $logger;
+        $this->config = $config;
         $this->client = $this->createClient();
     }
 
